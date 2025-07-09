@@ -56,35 +56,33 @@ void Player::Update()
 	//⑤壁に接着している場合の処理
 
 	//⑥接地状態の切り替え
-	
-	
-
-	//// マップ衝突チェック
-	// CollisionDetection(collisionMapInfo_);
-	//
-
-	
+		
 
 	// 着地フラグ
 	bool landing = false;
 	// 地面との当たり判定
 	// 下降中?
-	if (velocity_.y < 0) {
+	if (velocity_.y < 0)
+	{
 		// Y座標が地面以下になったら着地
-		if (worldTransform_.translation_.y <= 1.0f) {
+		if (worldTransform_.translation_.y <= 1.0f)
+		{
 			landing = true;
 		}
 	}
 	// 接地判定
-	if (onGround_) {
+	if (onGround_)
+	{
 		// ジャンプ開始
-		if (velocity_.y > 0.0f) {
+		if (velocity_.y > 0.0f) 
+		{
 			// 空中状態に移行
 			onGround_ = false;
 		}
 	} else {
 		// 着地
-		if (landing) {
+		if (landing)
+		{
 			// めり込み
 			worldTransform_.translation_.y = 1.0f;
 			// 摩擦で横方向速度が減哀する
@@ -276,8 +274,8 @@ KamataEngine::Vector3 Player::CornerPosition(const KamataEngine::Vector3& center
 	Vector3 offsetTable[kNumCorner] = {
 	    {+kWidth / 2.0f, -kHeight / 2.0f, 0},
 	    {-kWidth / 2.0f, -kHeight / 2.0f, 0},
-	    {+kWidth / 2.0f, -kHeight / 2.0f, 0},
-	    {-kWidth / 2.0f, -kHeight / 2.0f, 0},
+	    {+kWidth / 2.0f, +kHeight / 2.0f, 0},
+	    {-kWidth / 2.0f, +kHeight / 2.0f, 0},
 	};
 
 	return center + offsetTable[static_cast<uint32_t>(corner)];
