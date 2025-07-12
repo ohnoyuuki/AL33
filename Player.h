@@ -107,6 +107,9 @@ private:
 	//マップ衝突判定上
 	void CheckMapCollisionUp(CollisionMapInfo& info);
 
+	//マップ衝突判定下
+	void CheckMapCollisionDown(CollisionMapInfo& info);
+
 	//③判断結果を反映して移動させる
 	void CheckMapMove(const CollisionMapInfo&info);
 
