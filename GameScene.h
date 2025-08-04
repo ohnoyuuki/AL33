@@ -5,6 +5,7 @@
 #include"Skydome.h"
 #include"MapChipField.h"
 #include"CameraController.h"
+#include "Enemy.h"
 
 
 class GameScene
@@ -14,10 +15,30 @@ public:
 	KamataEngine::Model* model_ = nullptr;
 
 	KamataEngine::Model* modelBlock_ = nullptr;
-
+	// 3Dモデル
 	KamataEngine::Model* modelSkydome_ = nullptr; 
-
+	// モデルプレイヤー
 	KamataEngine::Model* modelPlayer_ = nullptr;
+
+	//モデル敵
+	KamataEngine::Model* modelEnemy_ = nullptr;
+
+	// 自キャラ
+	Player* player_ = nullptr;
+
+	// キューブ
+	Skydome* skydome_ = nullptr;
+
+	// 敵
+	Enemy* enemy_ = nullptr;
+
+	// 表示ブロック
+	void GenerateBlocks();
+
+	MapChipField* mapChipField_;
+
+	CameraController* cameraController_;
+
 
 	// 初期化
 	void Initialize();
@@ -28,16 +49,8 @@ public:
 	// デストラクタ
 	~GameScene();
 
-	Player* player_ = nullptr;
-
-	Skydome* skydome_ = nullptr;
-
-	//表示ブロック
-	void GenerateBlocks();
-
-	MapChipField* mapChipField_;
-
-	CameraController* cameraController_;
+	
+	
 
 private:
 	
