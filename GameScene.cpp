@@ -1,11 +1,9 @@
 #include "GameScene.h"
 #include "MyMath.h"
 
-
 using namespace KamataEngine;
 // 初期化/////////////////////////////////////////////////////////////
-void GameScene::Initialize()
-{
+void GameScene::Initialize() {
 
 	model_ = KamataEngine::Model::Create();
 
@@ -19,17 +17,12 @@ void GameScene::Initialize()
 
 	worldTransform_.Initialize();
 
-	
-
-	 
-
-
 	// 自キャラの生成
 	player_ = new Player();
 	// 自キャラの初期化
 	//
-	// 
-	// 
+	//
+	//
 	// player_->Initialize(modelPlayer_, &camera_,playerPosition);
 
 	// 生成
@@ -38,19 +31,19 @@ void GameScene::Initialize()
 	skydome_->Initialize(modelSkydome_, &camera_);
 
 	// 要素数
-	//const uint32_t kNumBlockVirtical = 10;
-	//const uint32_t kNumBlockHorizontal = 20;
+	// const uint32_t kNumBlockVirtical = 10;
+	// const uint32_t kNumBlockHorizontal = 20;
 	//// ブロック一個分の横幅
-	//const float kBlockWidth = 2.0f;
-	//const float kBlockHeigth = 2.0f;
-	// 要素数を変更する
-	//worldTransformBlocks_.resize(kNumBlockVirtical);
-	//for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+	// const float kBlockWidth = 2.0f;
+	// const float kBlockHeigth = 2.0f;
+	//  要素数を変更する
+	// worldTransformBlocks_.resize(kNumBlockVirtical);
+	// for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 	//	worldTransformBlocks_[i].resize(kNumBlockHorizontal);
-	//}
+	// }
 
 	//// キューブの生成
-	//for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
+	// for (uint32_t i = 0; i < kNumBlockVirtical; ++i) {
 	//	for (uint32_t j = 0; j < kNumBlockHorizontal; ++j) {
 	//		if ((i + j) % 2 == 0)
 	//			continue;
@@ -59,7 +52,7 @@ void GameScene::Initialize()
 	//		worldTransformBlocks_[i][j]->translation_.x = kBlockWidth * j;
 	//		worldTransformBlocks_[i][j]->translation_.y = kBlockHeigth * i;
 	//	}
-	//}
+	// }
 	debugCamera_ = new DebugCamera(1280, 720);
 
 	mapChipField_ = new MapChipField;
@@ -68,8 +61,8 @@ void GameScene::Initialize()
 
 	GenerateBlocks();
 
-	//座標をマップ地プ番号で指定
-	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(3,18);
+	// 座標をマップ地プ番号で指定
+	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(3, 18);
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
 	camera_.Initialize();
@@ -82,26 +75,29 @@ void GameScene::Initialize()
 
 	cameraController_->Reset();
 
-	//カメラ移動範囲
+	// カメラ移動範囲
 	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
 	cameraController_->SetMovableArea(cameraArea);
-	
-	//マップチップデータのセット
-	//自キャラの生成と初期化
+
+	// マップチップデータのセット
+	// 自キャラの生成と初期化
 	player_->SetMapChipField(mapChipField_);
 
 	// 敵
-	enemy_ = new Enemy();
-	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(15, 18);
 
-	enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
+	// Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(15, 18);
+	// enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
 
-
+	for (int32_t i = 0; i < 5; i++) {
+		Enemy* newEnemy = new Enemy();
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(6 + i, 18);
+		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
+		enemies_.push_back(newEnemy);
+	}
 }
 
 // 更新/////////////////////////////////////////////////////////////////////////////////////
-void GameScene::Update()
-{
+void GameScene::Update() {
 	// 自キャラの更新
 	player_->Update();
 	// ブロックの更新
@@ -120,7 +116,6 @@ void GameScene::Update()
 		}
 	}
 
-
 	cameraController_->Update();
 	debugCamera_->Update();
 #ifdef _DEBUG
@@ -128,8 +123,7 @@ void GameScene::Update()
 		isDebugCameraActive_ = !isDebugCameraActive_;
 	}
 #endif // _DEBUG
-	if (isDebugCameraActive_)
-	{
+	if (isDebugCameraActive_) {
 		// デバックカメラの更新
 		debugCamera_->Update();
 		// デバックカメラのビュー行列
@@ -142,26 +136,27 @@ void GameScene::Update()
 		// ビュープロジェクション行列の更新と転送
 		camera_.matView = cameraController_->GetViewProjection().matView;
 		camera_.matProjection = cameraController_->GetViewProjection().matProjection;
-		//ビュープロジェクション行列の転送
+		// ビュープロジェクション行列の転送
 		camera_.TransferMatrix();
 	}
 
 	skydome_->Update();
 
-	enemy_->Update();
-
+	for (Enemy* enemy : enemies_) {
+		enemy->Update();
+	}
+	// 全ての当たり判定を行う
+	CheckAllCollisions();
 }
 // 描画/////////////////////////////////////////////////////////////////////////////////
-void GameScene::Draw()
-{
+void GameScene::Draw() {
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
 	Model::PreDraw(dxCommon->GetCommandList());
 
 	// player_->Draw();
 	//  ブロックの描画
-	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) 
-	{
+	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
 			if (!worldTransformBlock) {
 				continue;
@@ -172,15 +167,15 @@ void GameScene::Draw()
 
 	skydome_->Draw();
 	player_->Draw();
-	enemy_->Draw();
+
+	for (Enemy* enemy : enemies_) {
+		enemy->Draw();
+	}
 
 	Model::PostDraw();
-
-	
 }
 // デストラクタ////////////////////////////////////////////////////////////////////////////////
-GameScene::~GameScene()
-{
+GameScene::~GameScene() {
 	delete model_;
 	// 自キャラの解放
 	delete player_;
@@ -201,28 +196,50 @@ GameScene::~GameScene()
 
 	delete cameraController_;
 
-	delete enemy_;
+	// 解放
+	for (Enemy* enemy : enemies_) {
+		delete enemy;
+	}
 }
 
-void GameScene::GenerateBlocks() 
-{
+void GameScene::CheckAllCollisions() {
+#pragma region 自キャラと敵キャラの当たり判定
+	// 判定対象１と２の座標
+	AABB aabb1, aabb2;
+
+	// 自キャラの座標
+	aabb1 = player_->GetAABB();
+
+	// 自キャラと敵弾全ての当たり判定
+	for (Enemy* enemy : enemies_) {
+		// 敵弾の座標
+		aabb2 = enemy->GetAABB();
+		// AABB同士の交差判定
+		if (IsCollision(aabb1, aabb2)) {
+			//自キャラの衝突時間関数を呼び出す
+			player_->OnCollision(enemy);
+			//敵弾の衝突時コールバックを呼び出す
+			enemy->OnCollision(player_);
+		}
+	}
+
+#pragma endregion
+}
+
+void GameScene::GenerateBlocks() {
 	uint32_t numBlockVirtical = mapChipField_->GetNumBlockVirtical();
 	uint32_t numBlockHorizontal = mapChipField_->GetNumBlockHorizontal();
 	// 要素数を変更する
 	// 列数を設定（縦方向のブロック数）
 	worldTransformBlocks_.resize(numBlockVirtical);
 
-	for (uint32_t i = 0; i < numBlockVirtical; ++i)
-	{
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
 		// 一列の要素数を設定（横方向のブロック数）
 		worldTransformBlocks_[i].resize(numBlockHorizontal);
 	}
-	for (uint32_t i = 0; i < numBlockVirtical; ++i)
-	{
-		for (UINT32 j = 0; j < numBlockHorizontal; ++j)
-		{
-			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock)
-			{
+	for (uint32_t i = 0; i < numBlockVirtical; ++i) {
+		for (UINT32 j = 0; j < numBlockHorizontal; ++j) {
+			if (mapChipField_->GetMapChipTypeByIndex(j, i) == MapChipType::kBlock) {
 				WorldTransform* worldTransform = new WorldTransform();
 				worldTransform->Initialize();
 				worldTransformBlocks_[i][j] = worldTransform;
