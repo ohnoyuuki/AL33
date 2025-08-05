@@ -4,6 +4,9 @@
 #include <algorithm>
 #include <numbers>
 
+using namespace KamataEngine;
+using namespace  MathUtility;
+
 
 //初期化
 void Enemy::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, KamataEngine::Vector3& position)
@@ -39,8 +42,7 @@ void Enemy::Update()
 
 	// 移動
 	worldTransform_.translation_.x += velocity_.x;
-	worldTransform_.translation_.y += velocity_.y;
-	worldTransform_.translation_.z += velocity_.z;
+	
 
 	// タイマーを加算
 	walkTimer_ += 5.0f / 60.0f;
