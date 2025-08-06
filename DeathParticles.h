@@ -1,14 +1,12 @@
 #pragma once
 #include "KamataEngine.h"
-#include<array>
-#include"MyMath.h"
-#include<numbers>
-#include<algorithm>
-
+#include "MyMath.h"
+#include <algorithm>
+#include <array>
+#include <numbers>
 
 using namespace KamataEngine;
 using namespace MathUtility;
-
 
 class DeathParticles {
 public:
@@ -19,11 +17,9 @@ public:
 	// 描画
 	void Draw();
 
-	
 
 
 private:
-
 	// モデル
 	KamataEngine::Model* model_ = nullptr;
 
@@ -34,26 +30,23 @@ private:
 
 	std::array<WorldTransform, kNumParticles> worldTransforms_;
 
-	//存続時間（消滅までの時間）＜秒＞
+	// 存続時間（消滅までの時間）＜秒＞
 	static inline const float kDuration = 1.0f;
 
-	//移動の速さ
+	// 移動の速さ
 	static inline const float kSpeed = 0.2f;
 
-	//分割した１個分の角度
+	// 分割した１個分の角度
 	static inline const float kAngleUnit = 2.0f * std::numbers::pi_v<float> / kNumParticles;
 
-	//終了フラグ
+	// 終了フラグ
 	bool isFinished_ = false;
 
-	//経過時間カウント
+	// 経過時間カウント
 	float counter_ = 0.0f;
 
-	//色変更オブジェクト
+	// 色変更オブジェクト
 	ObjectColor objectColor_;
-	//色の数値
+	// 色の数値
 	Vector4 color_;
-
-
-
 };
