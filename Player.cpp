@@ -14,7 +14,7 @@ void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 
 	// 引数の内容をメンバ変数に記録
 	camera_ = camera;
-
+	
 	// ワールド変換の初期化
 	worldTransform_.Initialize();
 
@@ -117,10 +117,17 @@ AABB Player::GetAABB() {
 	return aabb;
 }
 
+//当たったら
 void Player::OnCollision(const Enemy* enemy) { 
 	(void)enemy;
-	//ジャンプ開始（仮処理）
-	velocity_ += Vector3(0,1,0);
+
+	//当たったら死ぬ　
+	isDead_ = true;
+
+	////ジャンプ開始（仮処理）
+	//velocity_ += Vector3(0,1,0);
+
+
 }
 
 void Player::InputMove() {
