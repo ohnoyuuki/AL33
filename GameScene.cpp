@@ -15,6 +15,8 @@ void GameScene::Initialize() {
 
 	modelEnemy_ = Model::CreateFromOBJ("enemy");
 
+	modelDeathparticles_ = Model::CreateFromOBJ("deathParticle");
+
 	worldTransform_.Initialize();
 
 	// 自キャラの生成
@@ -94,6 +96,10 @@ void GameScene::Initialize() {
 		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
 		enemies_.push_back(newEnemy);
 	}
+
+	// 仮の生成処理。後で消す
+	deathParticles_ = new DeathParticles;
+	deathParticles_->Initialize(modelDeathparticles_, &camera_, playerPosition);
 }
 
 // 更新/////////////////////////////////////////////////////////////////////////////////////
@@ -147,6 +153,12 @@ void GameScene::Update() {
 	}
 	// 全ての当たり判定を行う
 	CheckAllCollisions();
+
+	//モデルパーティクル
+	if (deathParticles_) {
+		deathParticles_->Update();
+	}
+
 }
 // 描画/////////////////////////////////////////////////////////////////////////////////
 void GameScene::Draw() {
@@ -172,7 +184,15 @@ void GameScene::Draw() {
 		enemy->Draw();
 	}
 
+	// モデルパーティクル
+	if (deathParticles_) {
+		deathParticles_->Draw();
+	}
+
 	Model::PostDraw();
+
+	
+
 }
 // デストラクタ////////////////////////////////////////////////////////////////////////////////
 GameScene::~GameScene() {
@@ -200,6 +220,9 @@ GameScene::~GameScene() {
 	for (Enemy* enemy : enemies_) {
 		delete enemy;
 	}
+
+	delete deathParticles_;
+
 }
 
 void GameScene::CheckAllCollisions() {
@@ -216,9 +239,9 @@ void GameScene::CheckAllCollisions() {
 		aabb2 = enemy->GetAABB();
 		// AABB同士の交差判定
 		if (IsCollision(aabb1, aabb2)) {
-			//自キャラの衝突時間関数を呼び出す
+			// 自キャラの衝突時間関数を呼び出す
 			player_->OnCollision(enemy);
-			//敵弾の衝突時コールバックを呼び出す
+			// 敵弾の衝突時コールバックを呼び出す
 			enemy->OnCollision(player_);
 		}
 	}
