@@ -12,13 +12,19 @@ void TitleScene::Initialize() {
 
 	//ワールド変更の初期化
 	worldTransformTitle_.Initialize();
+	worldTransformTitle_.scale_ = {2, 2, 2};
+	worldTransformTitle_.translation_ = {0, 8, 0};
+
 	worldTransformPlayer_.Initialize();
+	worldTransformPlayer_.scale_ = {10, 10, 10};
+	worldTransformPlayer_.translation_ = {0, -8, 0};
+	worldTransformPlayer_.rotation_.y = std::numbers::pi_v<float>;
 
 
 }
 
 void TitleScene::Update() {
-
+	
 	//タイトル終了
 	if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 		finished_ = true;

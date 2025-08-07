@@ -17,6 +17,9 @@ public:
 	// 描画
 	void Draw();
 
+	// デスフラグのgetter
+	bool IsFinished() const { return finished_; }
+	
 
 
 private:
@@ -49,6 +52,9 @@ private:
 	ObjectColor objectColor_;
 	// 色の数値
 	Vector4 color_;
+
+	// 終了フラグ
+	bool finished_ = false;
 
 
 };

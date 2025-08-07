@@ -71,17 +71,17 @@ void DrawScene() {
 int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// ゲームシーンのインスタンス生成
 	
-
+	// エンジンの初期化
+	KamataEngine::Initialize(L"LE2D_08_オオノ_ユウキ_AL3");
 		// 最初のシーンの初期化
 		scene = Scene::kTitle;
 		titleScene = new TitleScene;
 		titleScene->Initialize();
 
-		// エンジンの初期化
-		KamataEngine::Initialize(L"LE2D_08_オオノ_ユウキ_AL3");
+		
 
-		// ゲームシーンの初期化
-		gameScene->Initialize();
+		//// ゲームシーンの初期化
+		//gameScene->Initialize();
 
 		DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
@@ -100,8 +100,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		    UpdateScene();
 
 
-			// ゲームシーンの更新
-			gameScene->Update();
+			//// ゲームシーンの更新
+			//gameScene->Update();
 
 			// 描画開始
 			dxCommon->PreDraw();
@@ -113,8 +113,8 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		    DrawScene(); //
 
 
-			// ゲームシーンの描画
-			gameScene->Draw();
+			//// ゲームシーンの描画
+			//gameScene->Draw();
 
 			// 描画終了
 			dxCommon->PostDraw();
