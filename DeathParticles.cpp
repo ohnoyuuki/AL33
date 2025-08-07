@@ -49,11 +49,11 @@ void DeathParticles::Update() {
 	if (counter_ >= kDuration) {
 		counter_ = kDuration;
 		//終了扱いにする
-		isFinished_ = true;
+		finished_ = true;
 	}
 
 	//終了なら何もしない
-	if (isFinished_) {
+	if (finished_) {
 		return;
 	}
 
@@ -68,7 +68,7 @@ void DeathParticles::Draw() {
 		model_->Draw(worldTransform, *camera_,&objectColor_);
 	}
 	//終了なら何もしない
-	if (isFinished_) {
+	if (finished_) {
 		return;
 	}
 }
