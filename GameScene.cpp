@@ -17,8 +17,6 @@ void GameScene::Initialize() {
 
 	modelDeathparticles_ = Model::CreateFromOBJ("deathParticle");
 
-
-
 	worldTransform_.Initialize();
 
 	// 自キャラの生成
@@ -98,11 +96,19 @@ void GameScene::Initialize() {
 	}
 
 	// ゲームプレイフェーズから開始
-	phase_ = Phase::kPlay;
+	phase_ = Phase::kFadeIn;
+
+	// フェード
+	fade_ = new Fade();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f);
 }
 
 // 更新//////////////////////////////////////////////////////////////////////////////////////////////////////
 void GameScene::Update() {
+
+	// フェード
+	fade_->Update();
 	ChangePhase();
 
 	switch (phase_) {
@@ -252,6 +258,9 @@ void GameScene::Draw() {
 	}
 
 	Model::PostDraw();
+
+	// フェード
+	fade_->Draw();
 }
 // デストラクタ////////////////////////////////////////////////////////////////////////////////
 GameScene::~GameScene() {
@@ -281,6 +290,9 @@ GameScene::~GameScene() {
 	}
 
 	delete deathParticles_;
+
+	// フェード
+	delete fade_;
 }
 
 void GameScene::ChangePhase() { ///////////////////////////////////////////////////////////
