@@ -90,7 +90,7 @@ void GameScene::Initialize() {
 
 	for (int32_t i = 0; i < 5; i++) {
 		Enemy* newEnemy = new Enemy();
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(6 + i, 18);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(10 + i, 18);
 		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
 		enemies_.push_back(newEnemy);
 	}
@@ -168,7 +168,9 @@ void GameScene::Update() {
 		break;
 	case Phase::kDeath:
 		if (deathParticles_ && deathParticles_->IsFinished()) {
-			finished_ = true;
+			phase_ = Phase::kFadeOut;
+
+			fade_->Start(Fade::Status::FadeOut, 1.0f);
 		}
 		// デス演出フェーズの処理////////////////////////////////////
 		//  //天球の更新
@@ -221,6 +223,60 @@ void GameScene::Update() {
 				worldTransformBlock->TransferMatrix();
 			}
 		}
+		break;
+	case Phase::kFadeIn:
+		// ゲームプレイフェーズの処理////////////////////////////////////
+		// 天球の更新
+		skydome_->Update();
+		// 自キャラの更新
+		player_->Update();
+		// 敵の更新
+		for (Enemy* enemy : enemies_) {
+			enemy->Update();
+		}
+		// カメラコントローラーの更新
+		cameraController_->Update();
+		// カメラの更新
+		debugCamera_->Update();
+#ifdef _DEBUG
+		if (Input::GetInstance()->TriggerKey(DIK_0)) {
+			isDebugCameraActive_ = !isDebugCameraActive_;
+		}
+#endif // _DEBUG
+		if (isDebugCameraActive_) {
+			// デバックカメラの更新
+			debugCamera_->Update();
+			// デバックカメラのビュー行列
+			camera_.matView = debugCamera_->GetCamera().matView;
+			// デバックカメラのプロジェクション行列
+			camera_.matProjection = debugCamera_->GetCamera().matProjection;
+			// ビュープロジェクション行列の転送
+			camera_.TransferMatrix();
+		} else {
+			// ビュープロジェクション行列の更新と転送
+			camera_.matView = cameraController_->GetViewProjection().matView;
+			camera_.matProjection = cameraController_->GetViewProjection().matProjection;
+			// ビュープロジェクション行列の転送
+			camera_.TransferMatrix();
+		}
+		// ブロックの更新
+		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
+			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
+				if (!worldTransformBlock) {
+					continue;
+				}
+				// アフィン変換行列の作成
+				worldTransformBlock->matWorld_ = MakeAffineMatrix(worldTransformBlock->scale_, worldTransformBlock->rotation_, worldTransformBlock->translation_);
+
+				/*	worldTransformBlock->matWorld_ = アフィン変換行列　*/
+
+				// 定数バッファに転送する
+				worldTransformBlock->TransferMatrix();
+			}
+		}
+		// 全ての当たり判定
+		CheckAllCollisions();
+
 		break;
 	}
 }
@@ -315,6 +371,19 @@ void GameScene::ChangePhase() { ////////////////////////////////////////////////
 	case Phase::kDeath:
 		// デス演出フェーズの処理
 
+		break;
+
+	case Phase::kFadeIn:
+		if (fade_->IsFinished()) {
+			// ゲームプレイ
+			phase_ = Phase::kPlay;
+		}
+		break;
+	case Phase::kFadeOut:
+		// シーン終了
+		if (fade_->IsFinished()) {
+			finished_ = true;
+		}
 		break;
 	}
 }
