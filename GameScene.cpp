@@ -90,7 +90,7 @@ void GameScene::Initialize() {
 
 	for (int32_t i = 0; i < 5; i++) {
 		Enemy* newEnemy = new Enemy();
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(10 + i, 18);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i*15, 18);
 		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
 		enemies_.push_back(newEnemy);
 	}
@@ -102,6 +102,17 @@ void GameScene::Initialize() {
 	fade_ = new Fade();
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
+
+	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(77, 18);
+	worldTransformGoal_.Initialize();
+	worldTransformGoal_.translation_ = goalPosition;
+	worldTransformGoal_.scale_ = {0.5f,0.5f,0.5f};
+
+
+	// 画像読み込み
+	textureHandle_ = TextureManager::Load("Goal.png");
+
+	modelGoal_ = Model::Create();
 }
 
 // 更新//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -279,11 +290,22 @@ void GameScene::Update() {
 
 		break;
 	}
+
+	worldTransformGoal_.matWorld_ = MakeAffineMatrix(worldTransformGoal_.scale_, worldTransformGoal_.rotation_, worldTransformGoal_.translation_);
+	worldTransformGoal_.TransferMatrix();
+
+	if (player_->GetWorldPosition().x >= 77) 
+	{
+		finished_ = true;
+		gameClear_ = true;
+	}
 }
 
 // 描画/////////////////////////////////////////////////////////////////////////////////
 void GameScene::Draw() {
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+
+	
 
 	Model::PreDraw(dxCommon->GetCommandList());
 
@@ -313,7 +335,12 @@ void GameScene::Draw() {
 		deathParticles_->Draw();
 	}
 
+	/*modelEnemy_->Draw(worldTransformGoal_, camera_);*/
+
+	modelGoal_->Draw(worldTransformGoal_, camera_,textureHandle_);
 	Model::PostDraw();
+
+	
 
 	// フェード
 	fade_->Draw();
@@ -349,6 +376,9 @@ GameScene::~GameScene() {
 
 	// フェード
 	delete fade_;
+
+	delete modelGoal_;
+	
 }
 
 void GameScene::ChangePhase() { ///////////////////////////////////////////////////////////

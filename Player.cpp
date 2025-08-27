@@ -10,7 +10,7 @@ using namespace MathUtility;
 
 void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const Vector3& position) {
 	// NULLポインタチェック
-	assert(model);
+	//assert(model);
 
 	// 引数の内容をメンバ変数に記録
 	camera_ = camera;
@@ -91,6 +91,11 @@ void Player::Update() {
 
 	//⑦旋回制御
 	AnimateTurn();
+
+	if (worldTransform_.translation_.y <= 0) 
+	{
+		isDead_ = true;
+	}
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

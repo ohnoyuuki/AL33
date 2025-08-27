@@ -1,17 +1,16 @@
 #pragma once
+#include "Fade.h"
 #include "KamataEngine.h"
-#include"Fade.h"
 #include "MyMath.h"
 
 using namespace KamataEngine;
-class TitleScene {
+class ClearScene {
 public:
-
-	//シーンのフェーズ
+	// シーンのフェーズ
 	enum class Phase {
-		kFadeIn,//フェードイン
-		kMain,//メイン部
-		kFadeOut,//フェードアウト
+		kFadeIn,  // フェードイン
+		kMain,    // メイン部
+		kFadeOut, // フェードアウト
 	};
 
 	// 初期化
@@ -21,14 +20,12 @@ public:
 	// 描画
 	void Draw();
 	// デストラクタ
-	~TitleScene();
+	~ClearScene();
 
-
-	//デスフラグのgetter 
+	// デスフラグのgetter
 	bool IsFinished() const { return finished_; }
 
 private:
-
 	static inline const float kTimeTitleMove = 2.0f;
 
 	// ビュープロジェクション
@@ -41,13 +38,13 @@ private:
 
 	float counter_ = 0.0f;
 
-	//終了フラグ
+	// 終了フラグ
 	bool finished_ = false;
 
-	//フェード
+	// フェード
 	Fade* fade_ = nullptr;
 
-	//現在のフェーズ
+	// 現在のフェーズ
 	Phase phase_ = Phase::kFadeIn;
 
 	// 画像読み込み

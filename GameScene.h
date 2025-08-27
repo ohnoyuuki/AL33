@@ -25,6 +25,9 @@ public:
 	KamataEngine::Model* modelEnemy_ = nullptr;
 	//デスパーティークル
 	KamataEngine::Model* modelDeathparticles_ = nullptr; 
+	//Goal
+	KamataEngine::Model* modelGoal_ = nullptr;
+
 
 
 	// 自キャラ
@@ -61,6 +64,7 @@ public:
 	//デスフラグのgetter
 	bool IsFinished() const { return finished_; }
 	
+	bool IsClear() const { return gameClear_; }
 
 private:
 	
@@ -97,6 +101,10 @@ private:
 	// フェード
 	Fade* fade_ = nullptr;
 
-	
+	KamataEngine::WorldTransform worldTransformGoal_;
 
+	// 画像読み込み
+	uint32_t textureHandle_ = 0;
+
+	bool gameClear_ = false;
 };

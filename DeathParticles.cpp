@@ -2,7 +2,7 @@
 
 void DeathParticles::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine::Vector3& position) {
 	// NULLポインタチェック
-	assert(model);
+	//assert(model);
 
 	// 引数の内容をメンバ変数に記録
 	camera_ = camera;
