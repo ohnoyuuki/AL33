@@ -138,11 +138,11 @@ void Player::OnCollision(const Enemy* enemy) {
 void Player::InputMove() {
 	if (onGround_) {
 
-		if (Input::GetInstance()->PushKey(DIK_RIGHT) || Input::GetInstance()->PushKey(DIK_LEFT)) {
+		if (Input::GetInstance()->PushKey(DIK_D) || Input::GetInstance()->PushKey(DIK_A)) {
 
 			// 左右加速
 			Vector3 acceleration = {};
-			if (Input::GetInstance()->PushKey(DIK_RIGHT)) ///////////////////////////
+			if (Input::GetInstance()->PushKey(DIK_D)) ///////////////////////////
 			{
 				acceleration.x += kAcceleration;
 				if (velocity_.x < 0.0f) {
@@ -157,7 +157,7 @@ void Player::InputMove() {
 					turnTimer_ = kTimeTurn;
 				}
 
-			} else if (Input::GetInstance()->PushKey(DIK_LEFT)) ////////////////////
+			} else if (Input::GetInstance()->PushKey(DIK_A)) ////////////////////
 			{
 				acceleration.x -= kAcceleration;
 				//// 右移動中の左入力
@@ -184,7 +184,7 @@ void Player::InputMove() {
 			velocity_.x *= (1.0f - kAttenuation);
 		}
 
-		if (Input::GetInstance()->PushKey(DIK_UP)) {
+		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 			// ジャンプ初速
 			velocity_ += Vector3(0, kJumpAcceleration, 0);
 		}
