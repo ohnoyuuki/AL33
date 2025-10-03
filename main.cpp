@@ -109,8 +109,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	titleScene = new TitleScene;
 	titleScene->Initialize();
 
-	//// ゲームシーンの初期化
-	// gameScene->Initialize();
 
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
 
@@ -122,7 +120,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 			break;
 		}
 
-		// titleScene->Update();
 		//   シーン切り替え
 		ChangeScene();
 		// シーン更新
@@ -134,14 +131,10 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		// 描画開始
 		dxCommon->PreDraw();
 
-		// ゲームシーンの描画
-		// titleScene->Draw();
 
 		// シーンの描画
-		DrawScene(); //
+		DrawScene(); 
 
-		//// ゲームシーンの描画
-		// gameScene->Draw();
 
 		// 描画終了
 		dxCommon->PostDraw();

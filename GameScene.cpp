@@ -22,7 +22,7 @@ void GameScene::Initialize() {
 	// 自キャラの生成
 	player_ = new Player();
 	// 自キャラの初期化
-	
+
 	// 生成
 	skydome_ = new Skydome();
 	// 初期化
@@ -63,7 +63,7 @@ void GameScene::Initialize() {
 
 	for (int32_t i = 0; i < 5; i++) {
 		Enemy* newEnemy = new Enemy();
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i*17, 18);
+		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i * 17, 18);
 		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
 		enemies_.push_back(newEnemy);
 	}
@@ -79,8 +79,7 @@ void GameScene::Initialize() {
 	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(77, 18);
 	worldTransformGoal_.Initialize();
 	worldTransformGoal_.translation_ = goalPosition;
-	worldTransformGoal_.scale_ = {0.5f,0.5f,0.5f};
-
+	worldTransformGoal_.scale_ = {0.5f, 0.5f, 0.5f};
 
 	// 画像読み込み
 	textureHandle_ = TextureManager::Load("Goal.png");
@@ -267,8 +266,7 @@ void GameScene::Update() {
 	worldTransformGoal_.matWorld_ = MakeAffineMatrix(worldTransformGoal_.scale_, worldTransformGoal_.rotation_, worldTransformGoal_.translation_);
 	worldTransformGoal_.TransferMatrix();
 
-	if (player_->GetWorldPosition().x >= 77) 
-	{
+	if (player_->GetWorldPosition().x >= 77) {
 		finished_ = true;
 		gameClear_ = true;
 	}
@@ -277,8 +275,6 @@ void GameScene::Update() {
 // 描画/////////////////////////////////////////////////////////////////////////////////
 void GameScene::Draw() {
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
-
-	
 
 	Model::PreDraw(dxCommon->GetCommandList());
 
@@ -310,10 +306,8 @@ void GameScene::Draw() {
 
 	/*modelEnemy_->Draw(worldTransformGoal_, camera_);*/
 
-	modelGoal_->Draw(worldTransformGoal_, camera_,textureHandle_);
+	modelGoal_->Draw(worldTransformGoal_, camera_, textureHandle_);
 	Model::PostDraw();
-
-	
 
 	// フェード
 	fade_->Draw();
@@ -351,7 +345,6 @@ GameScene::~GameScene() {
 	delete fade_;
 
 	delete modelGoal_;
-	
 }
 
 void GameScene::ChangePhase() { ///////////////////////////////////////////////////////////

@@ -59,10 +59,6 @@ void TitleScene::Update() {
 		}
 	}
 
-	////タイトル終了
-	//if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-	//	finished_ = true;
-	//}
 
 	//// フェード
 	//fade_->Update();
