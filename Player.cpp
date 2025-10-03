@@ -129,10 +129,6 @@ void Player::OnCollision(const Enemy* enemy) {
 	//当たったら死ぬ　
 	isDead_ = true;
 
-	////ジャンプ開始（仮処理）
-	//velocity_ += Vector3(0,1,0);
-
-
 }
 
 void Player::InputMove() {
