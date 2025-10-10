@@ -71,6 +71,70 @@ void Player::Update() {
 
 void Player::Draw() { model_->Draw(worldTransform_, *camera_); }
 
+void Player::BehaviorRootUpdate() {
+	// １移動入力//
+	InputMove();
+
+	// 衝突情報を初期化
+	CollisionMapInfo collisionMapInfo_;
+
+	// 移動量に速度の値をコピー
+	collisionMapInfo_.move = velocity_;
+
+	// ②移動量を加味して衝突判定する//
+	// ②マップ衝突チェック
+	CheckMapCollision(collisionMapInfo_);
+
+	//// 移動
+	// worldTransform_.translation_ += velocity_;
+
+	// ③判断結果を反映して移動させる
+	CheckMapMove(collisionMapInfo_);
+
+	// ④天井に接着している場合の処理
+	CheckMapCeiling(collisionMapInfo_);
+
+	// ⑤壁に接着している場合の処理
+	CheckMapWall(collisionMapInfo_);
+	// ⑥接地状態の切り替え
+	CheckMapLanding(collisionMapInfo_);
+
+	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
+
+	worldTransform_.TransferMatrix();
+
+	// ⑦旋回制御
+	AnimateTurn();
+
+	if (worldTransform_.translation_.y <= 0) {
+		isDead_ = true;
+	}
+
+}
+
+
+void Player::BehaviorRootInitialize() {
+
+}
+
+void Player::BehaviorAttackInitialize() {
+	//パラメータ初期化
+	attackParameter_ = 0;
+	velocity_ = {};
+	//溜めフェーズから始まる
+	attackPhase_ = AttackPhase::kAnticipation;
+
+}
+
+// 攻撃行動更新
+void Player::BehaviorAttackUpdate() { 
+	const Vector3 attackVelocity = {0.8f, 0.0f, 0.0f};
+	Vector3 velocity{};
+	attackParameter_++;
+
+	
+}
+
 Vector3 Player::GetWorldPosition() {
 	//ワールド座標を入れる変数
 	Vector3 worldPos;

@@ -27,6 +27,8 @@ class Player
 	// 描画
 	void Draw();
 
+	
+
 	static inline const float kAcceleration = 0.02f;//加速度
 	static inline const float kAttenuation = 0.1f;
 	static inline const float kLimitRunSpeed = 0.5f;
@@ -37,6 +39,22 @@ class Player
 		kRight,
 		kLeft,
 	};
+
+	//振る舞い
+	enum class Behavior {
+		kRoot,//通常状態
+		kAttack,//攻撃中
+
+	};
+
+	//攻撃フェーズ
+	enum class AttackPhase {
+		kUnknown = -1,//
+		kAnticipation,//
+		kAction,//
+		kRecovery,//
+	};
+
 
 	// 旋回開始時の角度
 	float turnFIrstRotationY_ = 0.0f;
@@ -76,9 +94,16 @@ class Player
 	// デスフラグのgetter
 	bool IsDead() const { return isDead_; }
 	
+	// 通常行動更新
+	void BehaviorRootUpdate();
 
+	// 攻撃行動更新
+	void BehaviorAttackUpdate();
 
-
+	//通常行動初期化
+	void BehaviorRootInitialize();
+	//攻撃行動初期化
+	void BehaviorAttackInitialize();
 	
 
 private:
@@ -160,6 +185,13 @@ private:
 	//デスフラグ
 	bool isDead_ = false;
 
-	
+	//振る舞い
+	Behavior behavior_ = Behavior::kRoot;
 
+	//攻撃ギミックの媒介変数
+	uint32_t attackParameter_ = 0;
+
+	//攻撃フェーズ
+	AttackPhase attackPhase_ = AttackPhase::kUnknown;
+	AttackPhase attackPhaseRequest_ = AttackPhase::kUnknown;
 };

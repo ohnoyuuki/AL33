@@ -9,6 +9,7 @@
 #include"DeathParticles.h"
 #include"Fade.h"
 
+using namespace KamataEngine;
 
 class GameScene
 {
@@ -107,4 +108,7 @@ private:
 	uint32_t textureHandle_ = 0;
 
 	bool gameClear_ = false;
+
+	Model* modelPlayerAttack_ = nullptr;
+
 };
