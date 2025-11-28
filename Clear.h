@@ -4,52 +4,66 @@
 #include "MyMath.h"
 
 using namespace KamataEngine;
+
+// クリアシーンを表すクラス
 class ClearScene {
 public:
-	// シーンのフェーズ
+	// シーンの進行段階（フェーズ）
 	enum class Phase {
-		kFadeIn,  // フェードイン
-		kMain,    // メイン部
-		kFadeOut, // フェードアウト
+		kFadeIn,  // シーン開始時のフェードイン
+		kMain,    // メイン表示中
+		kFadeOut, // 終了前のフェードアウト
 	};
 
-	// 初期化
+	// 初期化処理
 	void Initialize();
-	// 更新
+
+	// フレームごとの更新処理
 	void Update();
-	// 描画
+
+	// 描画処理
 	void Draw();
-	// デストラクタ
+
+	// デストラクタ（メモリ解放などを行う）
 	~ClearScene();
 
-	// デスフラグのgetter
+	// シーンが終了したかどうか（外部から取得）
 	bool IsFinished() const { return finished_; }
 
 private:
+	// タイトルモデルが動くまでの時間（秒）
 	static inline const float kTimeTitleMove = 2.0f;
 
-	// ビュープロジェクション
+	// カメラのビュー・プロジェクション管理
 	Camera camera_;
+
+	// タイトル文字のワールド変換（位置・回転・拡縮）
 	WorldTransform worldTransformTitle_;
+
+	// プレイヤーモデルのワールド変換
 	WorldTransform worldTransformPlayer_;
 
+	// プレイヤーモデル（3Dモデル）
 	Model* modelPlayer_ = nullptr;
+
+	// タイトルモデル（3Dモデル）
 	Model* modelTitle_ = nullptr;
 
+	// 時間計測用のカウンター
 	float counter_ = 0.0f;
 
-	// 終了フラグ
+	// シーン終了フラグ（true なら次のシーンへ）
 	bool finished_ = false;
 
-	// フェード
+	// フェード制御クラス
 	Fade* fade_ = nullptr;
 
-	// 現在のフェーズ
+	// 現在のシーンフェーズ
 	Phase phase_ = Phase::kFadeIn;
 
-	// 画像読み込み
+	// 画像の読み込みハンドル（テクスチャID）
 	uint32_t textureHandle_ = 0;
 
-	// スプライト
+	// スプライト（2D画像表示用）
 	KamataEngine::Sprite* sprite_ = nullptr;
 };

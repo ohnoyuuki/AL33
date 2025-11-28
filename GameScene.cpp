@@ -5,7 +5,7 @@ using namespace KamataEngine;
 // 初期化/////////////////////////////////////////////////////////////
 void GameScene::Initialize() {
 
-	model_ = KamataEngine::Model::Create();
+	model_ = Model::Create();
 
 	modelBlock_ = Model::CreateFromOBJ("block");
 

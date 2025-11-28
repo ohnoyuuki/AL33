@@ -1,35 +1,37 @@
-#include "Math.h"
 #include "Clear.h"
+#include "Math.h"
 #include <numbers>
 
 void ClearScene::Initialize() {
-	// 3Dモデルの生成
-	modelTitle_ = Model::CreateFromOBJ("titleFont", true);
-	modelPlayer_ = Model::CreateFromOBJ("Enemy");
 
-	// カメラの初期化
+	// --- 3Dモデルの生成（OBJファイルから読み込み） ---
+	modelTitle_ = Model::CreateFromOBJ("titleFont", true); // タイトル文字のモデル
+	modelPlayer_ = Model::CreateFromOBJ("Enemy");          // プレイヤー(敵)モデル
+
+	// --- カメラ初期化 ---
 	camera_.Initialize();
 
-	// ワールド変更の初期化
+	// --- タイトル文字のワールド変換 ---
 	worldTransformTitle_.Initialize();
-	worldTransformTitle_.scale_ = {2, 2, 2};
-	worldTransformTitle_.translation_ = {0, 8, 0};
+	worldTransformTitle_.scale_ = {2, 2, 2};       // 拡大
+	worldTransformTitle_.translation_ = {0, 8, 0}; // 上の方に配置
 
+	// --- プレイヤーモデルのワールド変換 ---
 	worldTransformPlayer_.Initialize();
-	worldTransformPlayer_.scale_ = {10, 10, 10};
-	worldTransformPlayer_.translation_ = {0, -8, 0};
-	worldTransformPlayer_.rotation_.y = std::numbers::pi_v<float>;
+	worldTransformPlayer_.scale_ = {10, 10, 10};                   // 大きく表示
+	worldTransformPlayer_.translation_ = {0, -8, 0};               // 下の方に配置
+	worldTransformPlayer_.rotation_.y = std::numbers::pi_v<float>; // Y軸で 180° 回転
 
-	// フェード
+	// --- フェードインの準備 ---
 	fade_ = new Fade();
 	fade_->Initialize();
-	fade_->Start(Fade::Status::FadeIn, 1.0f);
+	fade_->Start(Fade::Status::FadeIn, 1.0f); // 1秒かけてフェードイン
 
-	// 画像読み込み
+	// --- 画像読み込み（2Dスプライト） ---
 	textureHandle_ = TextureManager::Load("Clear.png");
 
-	// スプライトインスタンスの生成
-	sprite_ = Sprite::Create(textureHandle_, {0, 0});
+	// --- スプライト生成 ---
+	sprite_ = Sprite::Create(textureHandle_, {0, 0}); // 画面左上に表示
 }
 
 void ClearScene::Update() {
@@ -37,73 +39,79 @@ void ClearScene::Update() {
 	switch (phase_) {
 
 	case Phase::kMain:
-		// タイトルシーンの終了条件
+		// --- メイン状態（キー待ち） ---
+		// スペースキー押したらフェードアウト開始
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-			// フェードアウト開始
 			phase_ = Phase::kFadeOut;
-			fade_->Start(Fade::Status::FadeOut, 1.0f);
+			fade_->Start(Fade::Status::FadeOut, 1.0f); // 1秒フェードアウト
 		}
 		break;
+
 	case Phase::kFadeIn:
-		// フェード
+		// --- フェードイン中 ---
 		fade_->Update();
 		if (fade_->IsFinished()) {
-			phase_ = Phase::kMain;
+			phase_ = Phase::kMain; // フェードが終わったらメインへ
 		}
 		break;
+
 	case Phase::kFadeOut:
-		// フェード
+		// --- フェードアウト中 ---
 		fade_->Update();
 		if (fade_->IsFinished()) {
-			finished_ = true;
+			finished_ = true; // シーン終了
 		}
+		break;
 	}
 
-	////タイトル終了
-	// if (Input::GetInstance()->PushKey(DIK_SPACE)) {
-	//	finished_ = true;
-	// }
-
-	//// フェード
-	// fade_->Update();
+	// --- タイトルモデルのワールド行列更新 ---
 	worldTransformTitle_.matWorld_ = MakeAffineMatrix(worldTransformTitle_.scale_, worldTransformTitle_.rotation_, worldTransformTitle_.translation_);
 	worldTransformTitle_.TransferMatrix();
 
+	// --- プレイヤーモデルのワールド行列更新 ---
 	worldTransformPlayer_.matWorld_ = MakeAffineMatrix(worldTransformPlayer_.scale_, worldTransformPlayer_.rotation_, worldTransformPlayer_.translation_);
 	worldTransformPlayer_.TransferMatrix();
 }
 
 void ClearScene::Draw() {
 
-	// DirectXCommonインスタンスの取得
+	// DirectXコマンドを取得
 	DirectXCommon* dxCommon_ = DirectXCommon::GetInstance();
-	// スプライト描画前処理
+
+	// --- スプライト描画開始 ---
 	Sprite::PreDraw(dxCommon_->GetCommandList());
 
+	// Clear.png を描画
 	sprite_->Draw();
 
+	// スプライト描画終了
 	Sprite::PostDraw();
-	// 深度バッファクリア
+
+	// --- 深度バッファクリア ---
 	dxCommon_->ClearDepthBuffer();
-	// ３Dモデル描画前処理
+
+	// --- 3Dモデル描画準備 ---
 	Model::PreDraw(dxCommon_->GetCommandList());
 
-	// ここに３Dモデルインスタンスの描画処理を記述する
-	/*modelTitle_->Draw(worldTransformTitle_, camera_);*/
-	/*modelPlayer_->Draw(worldTransformPlayer_, camera_);*/
-	// ３Dモデル描画後処理
+	// --- 3Dモデル描画（必要ならコメント外す） ---
+	// modelTitle_->Draw(worldTransformTitle_, camera_);
+	// modelPlayer_->Draw(worldTransformPlayer_, camera_);
+
+	// --- 3Dモデル描画終了 ---
 	Model::PostDraw();
 
+	// --- フェード描画 ---
 	fade_->Draw();
 }
 
 ClearScene::~ClearScene() {
-	// モデル
+	// --- モデルの破棄 ---
 	delete modelTitle_;
 	delete modelPlayer_;
 
+	// --- スプライト破棄 ---
 	delete sprite_;
 
-	// フェード
+	// --- フェード破棄 ---
 	delete fade_;
 }
