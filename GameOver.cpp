@@ -27,7 +27,7 @@ void GameOverScene::Initialize() {
 	fade_->Start(Fade::Status::FadeIn, 1.0f); // 1秒かけてフェードイン
 
 	// --- 画像読み込み（2Dスプライト） ---
-	textureHandle_ = TextureManager::Load("Clear.png");
+	textureHandle_ = TextureManager::Load("Over.png");
 
 	// --- スプライト生成 ---
 	sprite_ = Sprite::Create(textureHandle_, {0, 0}); // 画面左上に表示
