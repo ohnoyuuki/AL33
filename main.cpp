@@ -3,73 +3,109 @@
 #include "TitleScene.h"
 #include <Windows.h>
 #include"Clear.h"
+#include"GameOver.h"
 
 using namespace KamataEngine;
 
+// 各シーンのインスタンス（ポインタ）
 GameScene* gameScene = nullptr;
 TitleScene* titleScene = nullptr;
 ClearScene* clearScene = nullptr;
+GameOverScene* overScene = nullptr;
 
+// シーンの種類
 enum class Scene {
 	kUnknown = 0,
-	kTitle,
-	kGame,
-	kClear,
+	kTitle,// タイトル
+	kGame,// ゲーム本編
+	kClear,// クリア
+	kOver,// ゲームオーバー
 };
 
-// 現在シーン（型）
+// 現在のシーンを示す変数
 Scene scene = Scene::kUnknown;
 
+// シーン切り替え処理
 void ChangeScene() {
 	switch (scene) {
+		//タイトルシーン
 	case Scene::kTitle:
+		// タイトルシーンが終了状態なら
 		if (titleScene->IsFinished()) {
-			// シーン変更
+			// ゲームシーンへ切り替え
 			scene = Scene::kGame;
-			// 旧シーンの解放
+
+			// 古いシーン削除
 			delete titleScene;
 			titleScene = nullptr;
-			// 新シーンの生成と初期化
+
+			// 新しいゲームシーン作成＆初期化
 			gameScene = new GameScene;
 			gameScene->Initialize();
 		}
 		break;
+
+		//ゲームシーン
 	case Scene::kGame:
+
+		// ゲームシーンが終了したか
 		if (gameScene->IsFinished()) {
 			// シーン変更
 
+			 // クリアしたか？
 			if (gameScene->IsClear()) {
+
+				// クリアシーンへ
 				scene = Scene::kClear;
 				clearScene = new ClearScene;
 				clearScene->Initialize();
 
 			} else {
-				scene = Scene::kTitle;
-				titleScene = new TitleScene;
-				titleScene->Initialize();
+				// 失敗 → オーバーシーンへ
+				scene = Scene::kOver;
+				overScene = new GameOverScene;
+				overScene->Initialize();
 			}
 		
 
-			
+			 // 古いゲームシーン削除
 			delete gameScene;
 			gameScene = nullptr;
 		}
 		break;
+		//クリアシーン
 	case Scene::kClear:
 		if (clearScene->IsFinished()) {
-			// シーン変更
+
+			// タイトルへ戻る
 			scene = Scene::kTitle;
-			// 旧シーンの解放
+			// 古いクリアシーン削除
 			delete clearScene;
 			clearScene = nullptr;
-			// 新シーンの生成と初期化
+
+			// 新しいタイトルシーン作成
 			titleScene = new TitleScene;
 			titleScene->Initialize();
 		}
 		break;
+		//オーバーシーン
+	case Scene::kOver:
+		if (overScene->IsFinished()) {
+			
+			// タイトルへ戻る
+			scene = Scene::kTitle;
+			// 古いオーバシーン削除
+			delete overScene;
+			overScene = nullptr;
+
+			// 新しいタイトルシーン作成
+			titleScene = new TitleScene;
+			titleScene->Initialize();
+		}
 	}
 }
 
+// シーンの更新処理
 void UpdateScene() {
 
 	switch (scene) {
@@ -82,8 +118,12 @@ void UpdateScene() {
 	case Scene::kClear:
 		clearScene->Update();
 		break;
+	case Scene::kOver:
+		overScene->Update();
+		break;
 	}
 }
+// シーンの描画処理
 void DrawScene() {
 	switch (scene) {
 	case Scene::kTitle:
@@ -94,6 +134,9 @@ void DrawScene() {
 		break;
 	case Scene::kClear:
 		clearScene->Draw();
+		break;
+	case Scene::kOver:
+		overScene->Draw();
 		break;
 	}
 }
@@ -125,8 +168,6 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 		// シーン更新
 		UpdateScene();
 
-		//// ゲームシーンの更新
-		// gameScene->Update();
 
 		// 描画開始
 		dxCommon->PreDraw();

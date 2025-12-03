@@ -13,7 +13,7 @@ void GameScene::Initialize() {
 
 	modelPlayer_ = Model::CreateFromOBJ("roboto");
 
-	modelEnemy_ = Model::CreateFromOBJ("boss");
+	modelEnemy_ = Model::CreateFromOBJ("enemy");
 
 	modelDeathparticles_ = Model::CreateFromOBJ("deathParticle");
 

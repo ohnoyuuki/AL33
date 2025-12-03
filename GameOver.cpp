@@ -1,6 +1,37 @@
 #include "GameOver.h"
+#include "Math.h"
+#include <numbers>
 
-void GameOverScene::Initialize() {}
+void GameOverScene::Initialize() {
+	// --- 3Dモデルの生成（OBJファイルから読み込み） ---
+	modelTitle_ = Model::CreateFromOBJ("titleFont", true); // タイトル文字のモデル
+	//modelPlayer_ = Model::CreateFromOBJ("player");          // プレイヤー(敵)モデル
+
+	// --- カメラ初期化 ---
+	camera_.Initialize();
+
+	// --- タイトル文字のワールド変換 ---
+	worldTransformTitle_.Initialize();
+	worldTransformTitle_.scale_ = {2, 2, 2};       // 拡大
+	worldTransformTitle_.translation_ = {0, 8, 0}; // 上の方に配置
+
+	// --- プレイヤーモデルのワールド変換 ---
+	worldTransformPlayer_.Initialize();
+	worldTransformPlayer_.scale_ = {10, 10, 10};                   // 大きく表示
+	worldTransformPlayer_.translation_ = {0, -8, 0};               // 下の方に配置
+	worldTransformPlayer_.rotation_.y = std::numbers::pi_v<float>; // Y軸で 180° 回転
+
+	// --- フェードインの準備 ---
+	fade_ = new Fade();
+	fade_->Initialize();
+	fade_->Start(Fade::Status::FadeIn, 1.0f); // 1秒かけてフェードイン
+
+	// --- 画像読み込み（2Dスプライト） ---
+	textureHandle_ = TextureManager::Load("Clear.png");
+
+	// --- スプライト生成 ---
+	sprite_ = Sprite::Create(textureHandle_, {0, 0}); // 画面左上に表示
+}
 
 void GameOverScene::Update() {
 	switch (phase_) {
@@ -40,6 +71,40 @@ void GameOverScene::Update() {
 	worldTransformPlayer_.TransferMatrix();
 }
 
-void GameOverScene::Draw() {}
+void GameOverScene::Draw() {
+	// DirectXコマンドを取得
+	DirectXCommon* dxCommon_ = DirectXCommon::GetInstance();
 
-GameOverScene::~GameOverScene() {}
+	// --- スプライト描画開始 ---
+	Sprite::PreDraw(dxCommon_->GetCommandList());
+
+	// Clear.png を描画
+	sprite_->Draw();
+
+	// スプライト描画終了
+	Sprite::PostDraw();
+
+	// --- 深度バッファクリア ---
+	dxCommon_->ClearDepthBuffer();
+
+	// --- 3Dモデル描画準備 ---
+	Model::PreDraw(dxCommon_->GetCommandList());
+
+	// --- 3Dモデル描画終了 ---
+	Model::PostDraw();
+
+	// --- フェード描画 ---
+	fade_->Draw();
+}
+
+GameOverScene::~GameOverScene() {
+	// --- モデルの破棄 ---
+	delete modelTitle_;
+	delete modelPlayer_;
+
+	// --- スプライト破棄 ---
+	delete sprite_;
+
+	// --- フェード破棄 ---
+	delete fade_;
+}
