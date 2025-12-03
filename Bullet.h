@@ -1,6 +1,10 @@
 #pragma once
 #include "KamataEngine.h"
 #include "MyMath.h"
+#include "MapChipField.h"
+#include <algorithm>
+#include <numbers>
+
 
 using namespace KamataEngine;
 
@@ -18,6 +22,7 @@ public:
 	Vector3 velocity_ = {};
 
 private:
+
 	WorldTransform worldTransform_;
 
 	Model* model_ = nullptr;

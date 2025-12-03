@@ -10,8 +10,10 @@ void GameScene::Initialize() {
 	modelBlock_ = Model::CreateFromOBJ("block");
 
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-
+	//プレイヤー
 	modelPlayer_ = Model::CreateFromOBJ("roboto");
+	//弾
+	modelBullet_ = Model::CreateFromOBJ("tama");
 
 	modelEnemy_ = Model::CreateFromOBJ("enemy");
 

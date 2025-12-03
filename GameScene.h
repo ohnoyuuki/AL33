@@ -1,6 +1,7 @@
 #pragma once
 #include "KamataEngine.h"
 #include "Player.h"
+#include"Bullet.h"
 #include <vector>
 #include"Skydome.h"
 #include"MapChipField.h"
@@ -15,13 +16,17 @@ class GameScene
 {
 public:
 
-	KamataEngine::Model* model_ = nullptr;
+	Model* model_ = nullptr;
 
-	KamataEngine::Model* modelBlock_ = nullptr;
+	Model* modelBlock_ = nullptr;
 	// 3Dモデル
-	KamataEngine::Model* modelSkydome_ = nullptr; 
+	Model* modelSkydome_ = nullptr; 
 	// モデルプレイヤー
-	KamataEngine::Model* modelPlayer_ = nullptr;
+	Model* modelPlayer_ = nullptr;
+
+	//弾
+	Model* modelBullet_ = nullptr;
+
 	//モデル敵
 	KamataEngine::Model* modelEnemy_ = nullptr;
 	//デスパーティークル
@@ -33,6 +38,9 @@ public:
 
 	// 自キャラ
 	Player* player_ = nullptr;
+
+	//弾
+	Bullet* bullet_ = nullptr;
 
 	// キューブ
 	Skydome* skydome_ = nullptr;
