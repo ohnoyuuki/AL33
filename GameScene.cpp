@@ -51,6 +51,11 @@ void GameScene::Initialize() {
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(3, 18);
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
+	//弾の初期位置
+	Vector3 bulletPosition = mapChipField_->GetMapChipPositionByIndex(4, 20);
+	bullet_->Initialize(modelBullet_, &camera_, bulletPosition);
+
+
 	// カメラ
 	camera_.Initialize();
 
@@ -112,6 +117,9 @@ void GameScene::Update() {
 
 		// 自キャラの更新
 		player_->Update();
+
+		//弾の更新
+		bullet_->Update();
 
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
@@ -227,6 +235,8 @@ void GameScene::Update() {
 		skydome_->Update();
 		// 自キャラの更新
 		player_->Update();
+		//弾の更新
+		bullet_->Update();
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
