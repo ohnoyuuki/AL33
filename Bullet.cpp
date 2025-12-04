@@ -5,6 +5,8 @@ Bullet::Bullet() {}
 
 Bullet::~Bullet() {}
 
+
+
 void Bullet::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, KamataEngine::Vector3& position) {
 	
 
@@ -19,18 +21,41 @@ void Bullet::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 	worldTransform_.translation_ = position;
 
 	// 速度を設定する
-	velocity_ = {-0.05f, 0.0f, 0.0f};
+	velocity_ = {-0.5f, 0.0f, 0.0f};
 
 }
 
 void Bullet::Update() {
 
-	// 移動
+	if (!isActive_) {
+		return; // 非表示なら処理なし
+	}
+		
+	
+	//=== 移動 ===//
 	worldTransform_.translation_.x -= velocity_.x;
+	worldTransform_.translation_.y += velocity_.y;
+	worldTransform_.translation_.z += velocity_.z;
+
+
+
 
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	worldTransform_.TransferMatrix();
 }
 
-void Bullet::Draw() { model_->Draw(worldTransform_, *camera_); 
+void Bullet::Draw() {
+	if (isActive_) {
+		model_->Draw(worldTransform_, *camera_);
+	};
 }
+
+ Vector3 Bullet::GetWorldPosition() {//ワールド座標を入れる変数
+	Vector3 worldPos;
+	// ワールド行列の平行移動成分を取得（ワールド座標）
+	worldPos.x = worldTransform_.matWorld_.m[3][0];
+	worldPos.y = worldTransform_.matWorld_.m[3][1];
+	worldPos.z = worldTransform_.matWorld_.m[3][2];
+
+	return worldPos;
+ }

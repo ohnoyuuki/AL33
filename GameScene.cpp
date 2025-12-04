@@ -30,8 +30,8 @@ void GameScene::Initialize() {
 
 	// 自キャラの生成
 	player_ = new Player();
-	
-	//弾の生成
+
+	// 弾の生成
 	bullet_ = new Bullet();
 
 	// スカイドーム生成
@@ -39,24 +39,23 @@ void GameScene::Initialize() {
 	// 初期化
 	skydome_->Initialize(modelSkydome_, &camera_);
 
-	 // デバッグカメラ
+	// デバッグカメラ
 	debugCamera_ = new DebugCamera(1280, 720);
 
-	 // マップチップ読込
+	// マップチップ読込
 	mapChipField_ = new MapChipField;
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 
 	// ブロック生成（マップを形にする）
 	GenerateBlocks();
 
-	//プレイヤーの初期位置（マップチップから取得）座標をマップ地プ番号で指定
+	// プレイヤーの初期位置（マップチップから取得）座標をマップ地プ番号で指定
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(3, 18);
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
-	//弾の初期位置
+	// 弾の初期位置
 	Vector3 bulletPosition = mapChipField_->GetMapChipPositionByIndex(4, 18);
 	bullet_->Initialize(modelBullet_, &camera_, bulletPosition);
-
 
 	// カメラ
 	camera_.Initialize();
@@ -76,6 +75,7 @@ void GameScene::Initialize() {
 	// マップチップデータのセット
 	// 自キャラの生成と初期化（当たり判定用）
 	player_->SetMapChipField(mapChipField_);
+
 
 	// 敵生成（等間隔に5体）
 	for (int32_t i = 0; i < 5; i++) {
@@ -109,7 +109,7 @@ void GameScene::Update() {
 
 	// フェード
 	fade_->Update();
-	ChangePhase();// フェーズ変更処理
+	ChangePhase(); // フェーズ変更処理
 
 	switch (phase_) {
 	case Phase::kPlay:
@@ -120,8 +120,18 @@ void GameScene::Update() {
 		// 自キャラの更新
 		player_->Update();
 
-		//弾の更新
+		// 弾の更新
 		bullet_->Update();
+
+		// スペースキーで弾を発射（位置をリセット）
+		//if (!bullet_->isActive_) {
+			if (Input::GetInstance()->TriggerKey(DIK_J)) {
+				Vector3 pos = player_->GetWorldPosition();
+				bullet_->Reset(pos);
+			}
+		//}
+
+		
 
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
@@ -237,8 +247,11 @@ void GameScene::Update() {
 		skydome_->Update();
 		// 自キャラの更新
 		player_->Update();
-		//弾の更新
+		// 弾の更新
 		bullet_->Update();
+
+
+
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
@@ -304,7 +317,6 @@ void GameScene::Draw() {
 
 	Model::PreDraw(dxCommon->GetCommandList());
 
-	
 	//  ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -317,16 +329,15 @@ void GameScene::Draw() {
 
 	skydome_->Draw();
 
-	//プレイヤー（死んでない時描画）
+	// プレイヤー（死んでない時描画）
 	if (!player_->IsDead()) {
 		player_->Draw();
 	}
 
-	//弾
+	// 弾
 	bullet_->Draw();
 
-
-	//敵
+	// 敵
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
 	}
@@ -440,6 +451,21 @@ void GameScene::CheckAllCollisions() {
 	}
 
 #pragma endregion
+
+	/*#pragma region 弾と敵の当たり判定
+	AABB bulletAABB = bullet_->GetAABB();
+
+	for (Enemy* enemy : enemies_) {
+		AABB enemyAABB = enemy->GetAABB();
+
+		if (IsCollision(bulletAABB, enemyAABB)) {
+			bullet_->OnCollision(enemy);
+			enemy->OnCollision(bullet_);
+		}
+	}*/
+#pragma endregion
+
+
 }
 
 void GameScene::GenerateBlocks() {

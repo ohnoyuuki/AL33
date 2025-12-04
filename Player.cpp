@@ -8,7 +8,7 @@ using namespace KamataEngine;
 
 using namespace MathUtility;
 
-void Player::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const Vector3& position) {
+void Player::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	// NULLポインタチェック
 	//assert(model);
 

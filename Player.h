@@ -5,6 +5,8 @@
 class MapChipField;
 class Enemy;
 
+using namespace KamataEngine;
+
 // ２移動量を加味して衝突判定する//
 // マップとの当たり判定情報
 struct CollisionMapInfo 
@@ -21,7 +23,7 @@ class Player
 	
     public:
 	// 初期化
-	void Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera, const KamataEngine ::Vector3& position);
+	void Initialize(Model* model, Camera* camera, const Vector3& position);
 	// 更新
 	void Update();
 	// 描画
@@ -77,13 +79,13 @@ class Player
 	const KamataEngine::WorldTransform& GetWorldTransform() const { return worldTransform_; }
 
 	// 速度加算
-	const KamataEngine::Vector3& GetVelocity() const { return velocity_; }
+	const Vector3& GetVelocity() const { return velocity_; }
 
 	//マップチップSetter
 	void SetMapChipField(MapChipField* mapChipField) {mapChipField_ = mapChipField;}
 
 	//ワールド座標を取得
-	KamataEngine::Vector3 GetWorldPosition();
+	Vector3 GetWorldPosition();
 	
 	//AABBを取得
 	AABB GetAABB();

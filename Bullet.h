@@ -2,6 +2,7 @@
 #include "KamataEngine.h"
 #include "MyMath.h"
 #include "MapChipField.h"
+#include"Enemy.h"
 #include <algorithm>
 #include <numbers>
 
@@ -18,8 +19,22 @@ public:
 	void Update();
 	void Draw();
 
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
+
 	// 速度
 	Vector3 velocity_ = {};
+
+	bool isActive_ = false;
+
+	//リセット
+	void Reset(const Vector3& pos) {
+		worldTransform_.translation_ = pos;
+		isActive_ = true;
+	}
+
+	//void OnCollision(Enemy* enemy) { isActive_ = false; }
+
 
 private:
 
