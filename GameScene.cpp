@@ -31,6 +31,8 @@ void GameScene::Initialize() {
 	// 自キャラの生成
 	player_ = new Player();
 	
+	//弾の生成
+	bullet_ = new Bullet();
 
 	// スカイドーム生成
 	skydome_ = new Skydome();
@@ -52,7 +54,7 @@ void GameScene::Initialize() {
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
 	//弾の初期位置
-	Vector3 bulletPosition = mapChipField_->GetMapChipPositionByIndex(4, 20);
+	Vector3 bulletPosition = mapChipField_->GetMapChipPositionByIndex(4, 18);
 	bullet_->Initialize(modelBullet_, &camera_, bulletPosition);
 
 
@@ -302,7 +304,7 @@ void GameScene::Draw() {
 
 	Model::PreDraw(dxCommon->GetCommandList());
 
-	// player_->Draw();
+	
 	//  ブロックの描画
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {
@@ -315,10 +317,16 @@ void GameScene::Draw() {
 
 	skydome_->Draw();
 
+	//プレイヤー（死んでない時描画）
 	if (!player_->IsDead()) {
 		player_->Draw();
 	}
 
+	//弾
+	bullet_->Draw();
+
+
+	//敵
 	for (Enemy* enemy : enemies_) {
 		enemy->Draw();
 	}
@@ -341,6 +349,8 @@ GameScene::~GameScene() {
 	delete model_;
 	// 自キャラの解放
 	delete player_;
+
+	delete bullet_;
 
 	for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 		for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {

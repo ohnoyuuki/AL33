@@ -19,11 +19,15 @@ void Bullet::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 	worldTransform_.translation_ = position;
 
 	// 速度を設定する
-	velocity_ = {1.0f, 0.0f, 0.0f};
+	velocity_ = {-0.05f, 0.0f, 0.0f};
 
 }
 
 void Bullet::Update() {
+
+	// 移動
+	worldTransform_.translation_.x -= velocity_.x;
+
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
 	worldTransform_.TransferMatrix();
 }
