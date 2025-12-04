@@ -5,43 +5,53 @@ using namespace KamataEngine;
 // 初期化/////////////////////////////////////////////////////////////
 void GameScene::Initialize() {
 
+	// モデル読み込み（汎用モデル）
 	model_ = Model::Create();
 
+	// ブロック
 	modelBlock_ = Model::CreateFromOBJ("block");
 
+	// 天球（スカイドーム）
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-	//プレイヤー
+
+	// プレイヤー
 	modelPlayer_ = Model::CreateFromOBJ("roboto");
-	//弾
+
+	// 弾
 	modelBullet_ = Model::CreateFromOBJ("tama");
 
+	// 敵
 	modelEnemy_ = Model::CreateFromOBJ("enemy");
 
+	// デスパーティクル
 	modelDeathparticles_ = Model::CreateFromOBJ("deathParticle");
 
 	worldTransform_.Initialize();
 
 	// 自キャラの生成
 	player_ = new Player();
-	// 自キャラの初期化
+	
 
-	// 生成
+	// スカイドーム生成
 	skydome_ = new Skydome();
 	// 初期化
 	skydome_->Initialize(modelSkydome_, &camera_);
 
+	 // デバッグカメラ
 	debugCamera_ = new DebugCamera(1280, 720);
 
+	 // マップチップ読込
 	mapChipField_ = new MapChipField;
-
 	mapChipField_->LoadMapChipCsv("Resources/blocks.csv");
 
+	// ブロック生成（マップを形にする）
 	GenerateBlocks();
 
-	// 座標をマップ地プ番号で指定
+	//プレイヤーの初期位置（マップチップから取得）座標をマップ地プ番号で指定
 	Vector3 playerPosition = mapChipField_->GetMapChipPositionByIndex(3, 18);
 	player_->Initialize(modelPlayer_, &camera_, playerPosition);
 
+	// カメラ
 	camera_.Initialize();
 
 	cameraController_ = new CameraController();
@@ -52,17 +62,15 @@ void GameScene::Initialize() {
 
 	cameraController_->Reset();
 
-	// カメラ移動範囲
+	// カメラ移動範囲（マップ外に出ないため）
 	CameraController::Rect cameraArea = {12.0f, 100 - 12.0f, 6.0f, 6.0f};
 	cameraController_->SetMovableArea(cameraArea);
 
 	// マップチップデータのセット
-	// 自キャラの生成と初期化
+	// 自キャラの生成と初期化（当たり判定用）
 	player_->SetMapChipField(mapChipField_);
 
-	// Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(15, 18);
-	// enemy_->Initialize(modelEnemy_, &camera_, enemyPosition);
-
+	// 敵生成（等間隔に5体）
 	for (int32_t i = 0; i < 5; i++) {
 		Enemy* newEnemy = new Enemy();
 		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i * 17, 18);
@@ -70,7 +78,7 @@ void GameScene::Initialize() {
 		enemies_.push_back(newEnemy);
 	}
 
-	// ゲームプレイフェーズから開始
+	// ゲームプレイフェーズから開始（フェードインから）
 	phase_ = Phase::kFadeIn;
 
 	// フェード
@@ -78,6 +86,7 @@ void GameScene::Initialize() {
 	fade_->Initialize();
 	fade_->Start(Fade::Status::FadeIn, 1.0f);
 
+	// ゴール配置
 	Vector3 goalPosition = mapChipField_->GetMapChipPositionByIndex(77, 18);
 	worldTransformGoal_.Initialize();
 	worldTransformGoal_.translation_ = goalPosition;
@@ -85,7 +94,6 @@ void GameScene::Initialize() {
 
 	// 画像読み込み
 	textureHandle_ = TextureManager::Load("Goal.png");
-
 	modelGoal_ = Model::Create();
 }
 
@@ -94,22 +102,25 @@ void GameScene::Update() {
 
 	// フェード
 	fade_->Update();
-	ChangePhase();
+	ChangePhase();// フェーズ変更処理
 
 	switch (phase_) {
 	case Phase::kPlay:
 		// ゲームプレイフェーズの処理////////////////////////////////////
 		// 天球の更新
 		skydome_->Update();
+
 		// 自キャラの更新
 		player_->Update();
+
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
 			enemy->Update();
 		}
 		// カメラコントローラーの更新
 		cameraController_->Update();
-		// カメラの更新
+
+		// デバッグカメラ操作（F1キーなどで切替）
 		debugCamera_->Update();
 #ifdef _DEBUG
 		if (Input::GetInstance()->TriggerKey(DIK_0)) {
@@ -132,6 +143,7 @@ void GameScene::Update() {
 			// ビュープロジェクション行列の転送
 			camera_.TransferMatrix();
 		}
+
 		// ブロックの更新
 		for (std::vector<WorldTransform*>& worldTransformBlockLine : worldTransformBlocks_) {
 			for (WorldTransform* worldTransformBlock : worldTransformBlockLine) {

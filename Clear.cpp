@@ -6,7 +6,7 @@ void ClearScene::Initialize() {
 
 	// --- 3Dモデルの生成（OBJファイルから読み込み） ---
 	modelTitle_ = Model::CreateFromOBJ("titleFont", true); // タイトル文字のモデル
-	modelPlayer_ = Model::CreateFromOBJ("Enemy");          // プレイヤー(敵)モデル
+	//modelPlayer_ = Model::CreateFromOBJ("Enemy");          // プレイヤー(敵)モデル
 
 	// --- カメラ初期化 ---
 	camera_.Initialize();
