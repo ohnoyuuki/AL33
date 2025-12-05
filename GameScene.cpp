@@ -76,7 +76,6 @@ void GameScene::Initialize() {
 	// 自キャラの生成と初期化（当たり判定用）
 	player_->SetMapChipField(mapChipField_);
 
-
 	// 敵生成（等間隔に5体）
 	for (int32_t i = 0; i < 5; i++) {
 		Enemy* newEnemy = new Enemy();
@@ -102,6 +101,22 @@ void GameScene::Initialize() {
 	// 画像読み込み
 	textureHandle_ = TextureManager::Load("Goal.png");
 	modelGoal_ = Model::Create();
+
+	// サウンドデータの読み込み
+	soundTitleHandle_ = Audio::GetInstance()->LoadWave("ALTitle.mp3");
+	soundGameHandle_ = Audio::GetInstance()->LoadWave("ALGame.mp3");
+	soundClearHandle_ = Audio::GetInstance()->LoadWave("ALClear.mp3");
+	soundOverHandle_ = Audio::GetInstance()->LoadWave("ALOver.mp3");
+
+	// --- 再生ハンドルは全部初期化しておく ---
+	voiceTitleHandle_ = -1;
+	voiceGameHandle_ = -1;
+	voiceClearHandle_ = -1;
+	voiceOverHandle_ = -1;
+	
+	// タイトルBGMをループで流す
+	voiceTitleHandle_ = Audio::GetInstance()->PlayWave(soundGameHandle_, true);
+
 }
 
 // 更新//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -112,7 +127,10 @@ void GameScene::Update() {
 	ChangePhase(); // フェーズ変更処理
 
 	switch (phase_) {
+
+	
 	case Phase::kPlay:
+
 		// ゲームプレイフェーズの処理////////////////////////////////////
 		// 天球の更新
 		skydome_->Update();
@@ -124,14 +142,12 @@ void GameScene::Update() {
 		bullet_->Update();
 
 		// スペースキーで弾を発射（位置をリセット）
-		//if (!bullet_->isActive_) {
-			if (Input::GetInstance()->TriggerKey(DIK_J)) {
-				Vector3 pos = player_->GetWorldPosition();
-				bullet_->Reset(pos);
-			}
+		// if (!bullet_->isActive_) {
+		if (Input::GetInstance()->TriggerKey(DIK_J)) {
+			Vector3 pos = player_->GetWorldPosition();
+			bullet_->Reset(pos);
+		}
 		//}
-
-		
 
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
@@ -202,6 +218,15 @@ void GameScene::Update() {
 			deathParticles_->Update();
 		}
 
+		// プレイヤーが死んだら弾消える
+		if (player_->IsDead()) {
+			bullet_->isActive_ = false;
+			// 音声停止
+			Audio::GetInstance()->StopWave(soundGameHandle_);
+			// ゲームBGMをループ再生
+			voiceOverHandle_ = Audio::GetInstance()->PlayWave(soundOverHandle_, true);
+		}
+
 		// カメラの更新////////////////////
 		debugCamera_->Update();
 #ifdef _DEBUG
@@ -240,17 +265,20 @@ void GameScene::Update() {
 				worldTransformBlock->TransferMatrix();
 			}
 		}
+
+
+		
 		break;
 	case Phase::kFadeIn:
 		// ゲームプレイフェーズの処理////////////////////////////////////
+		
+		
 		// 天球の更新
 		skydome_->Update();
 		// 自キャラの更新
 		player_->Update();
 		// 弾の更新
 		bullet_->Update();
-
-
 
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {
@@ -305,10 +333,36 @@ void GameScene::Update() {
 	worldTransformGoal_.matWorld_ = MakeAffineMatrix(worldTransformGoal_.scale_, worldTransformGoal_.rotation_, worldTransformGoal_.translation_);
 	worldTransformGoal_.TransferMatrix();
 
+	//ゲームクリア
 	if (player_->GetWorldPosition().x >= 77) {
 		finished_ = true;
 		gameClear_ = true;
+		// 音声停止
+		Audio::GetInstance()->StopWave(soundGameHandle_);
+		// ゲームBGMをループ再生
+		voiceClearHandle_ = Audio::GetInstance()->PlayWave(soundClearHandle_, true);
 	}
+	// シーンが終了したら、音声を全て停止
+	if (finished_) {
+		// 再生ハンドルが有効な場合のみ停止
+		if (voiceGameHandle_ != -1) {
+			Audio::GetInstance()->StopWave(voiceGameHandle_);
+			voiceGameHandle_ = -1;
+		}
+		if (voiceClearHandle_ != -1) {
+			Audio::GetInstance()->StopWave(voiceClearHandle_);
+			voiceClearHandle_ = -1;
+		}
+		if (voiceOverHandle_ != -1) {
+			Audio::GetInstance()->StopWave(voiceOverHandle_);
+			voiceOverHandle_ = -1;
+		}
+		if (voiceTitleHandle_ != -1) {
+			Audio::GetInstance()->StopWave(voiceTitleHandle_);
+			voiceTitleHandle_ = -1;
+		}
+	}
+
 }
 
 // 描画/////////////////////////////////////////////////////////////////////////////////
@@ -390,6 +444,11 @@ GameScene::~GameScene() {
 	delete fade_;
 
 	delete modelGoal_;
+
+	Audio::GetInstance()->StopWave(voiceGameHandle_);
+	Audio::GetInstance()->StopWave(voiceClearHandle_);
+	Audio::GetInstance()->StopWave(voiceOverHandle_);
+	Audio::GetInstance()->StopWave(voiceTitleHandle_);
 }
 
 void GameScene::ChangePhase() { ///////////////////////////////////////////////////////////
@@ -411,7 +470,8 @@ void GameScene::ChangePhase() { ////////////////////////////////////////////////
 
 	case Phase::kDeath:
 		// デス演出フェーズの処理
-
+		// 音声停止
+		Audio::GetInstance()->StopWave(soundOverHandle_);
 		break;
 
 	case Phase::kFadeIn:
@@ -424,6 +484,11 @@ void GameScene::ChangePhase() { ////////////////////////////////////////////////
 		// シーン終了
 		if (fade_->IsFinished()) {
 			finished_ = true;
+			// 音声停止
+			Audio::GetInstance()->StopWave(soundClearHandle_);
+			// 音声停止
+			Audio::GetInstance()->StopWave(soundOverHandle_);
+
 		}
 		break;
 	}
@@ -456,16 +521,14 @@ void GameScene::CheckAllCollisions() {
 	AABB bulletAABB = bullet_->GetAABB();
 
 	for (Enemy* enemy : enemies_) {
-		AABB enemyAABB = enemy->GetAABB();
+	    AABB enemyAABB = enemy->GetAABB();
 
-		if (IsCollision(bulletAABB, enemyAABB)) {
-			bullet_->OnCollision(enemy);
-			enemy->OnCollision(bullet_);
-		}
+	    if (IsCollision(bulletAABB, enemyAABB)) {
+	        bullet_->OnCollision(enemy);
+	        enemy->OnCollision(bullet_);
+	    }
 	}*/
 #pragma endregion
-
-
 }
 
 void GameScene::GenerateBlocks() {

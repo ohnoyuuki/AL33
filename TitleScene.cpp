@@ -2,6 +2,7 @@
 #include <numbers>
 #include "Math.h"
 
+
 void TitleScene::Initialize() {
 	//3Dモデルの生成
 	modelTitle_ = Model::CreateFromOBJ("titleFont", true);
@@ -30,6 +31,21 @@ void TitleScene::Initialize() {
 
 	// スプライトインスタンスの生成
 	sprite_ = Sprite::Create(textureHandle_, {0, 0});
+
+	// サウンドデータの読み込み
+	soundTitleHandle_ = Audio::GetInstance()->LoadWave("ALTitle.mp3");
+	soundGameHandle_ = Audio::GetInstance()->LoadWave("ALGame.mp3");
+	soundClearHandle_ = Audio::GetInstance()->LoadWave("ALClear.mp3");
+	soundOverHandle_ = Audio::GetInstance()->LoadWave("ALOver.mp3");
+
+	// --- 再生ハンドルは全部初期化しておく ---
+	voiceTitleHandle_ = -1;
+	voiceGameHandle_ = -1;
+	voiceClearHandle_ = -1;
+	voiceOverHandle_ = -1;
+
+	// タイトルBGMをループで流す
+	voiceTitleHandle_ = Audio::GetInstance()->PlayWave(soundTitleHandle_, true);
 }
 
 void TitleScene::Update() {
@@ -39,9 +55,12 @@ void TitleScene::Update() {
 	case Phase::kMain:
 		//タイトルシーンの終了条件
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			// 音声停止
+			Audio::GetInstance()->StopWave(voiceTitleHandle_);
 			//フェードアウト開始
 			phase_ = Phase::kFadeOut;
 			fade_->Start(Fade::Status::FadeOut, 1.0f);
+			
 		}
 		break;
 	case Phase::kFadeIn:
@@ -54,6 +73,7 @@ void TitleScene::Update() {
 	case Phase::kFadeOut:
 		//フェード
 		fade_->Update();
+
 		if (fade_->IsFinished()) {
 			finished_ = true;
 		}

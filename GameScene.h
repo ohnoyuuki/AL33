@@ -1,45 +1,41 @@
 #pragma once
-#include "KamataEngine.h"
-#include "Player.h"
-#include"Bullet.h"
-#include <vector>
-#include"Skydome.h"
-#include"MapChipField.h"
-#include"CameraController.h"
+#include "Bullet.h"
+#include "CameraController.h"
+#include "DeathParticles.h"
 #include "Enemy.h"
-#include"DeathParticles.h"
-#include"Fade.h"
+#include "Fade.h"
+#include "KamataEngine.h"
+#include "MapChipField.h"
+#include "Player.h"
+#include "Skydome.h"
+#include <vector>
 
 using namespace KamataEngine;
 
-class GameScene
-{
+class GameScene {
 public:
-
 	Model* model_ = nullptr;
 
 	Model* modelBlock_ = nullptr;
 	// 3Dモデル
-	Model* modelSkydome_ = nullptr; 
+	Model* modelSkydome_ = nullptr;
 	// モデルプレイヤー
 	Model* modelPlayer_ = nullptr;
 
-	//弾
+	// 弾
 	Model* modelBullet_ = nullptr;
 
-	//モデル敵
+	// モデル敵
 	KamataEngine::Model* modelEnemy_ = nullptr;
-	//デスパーティークル
-	KamataEngine::Model* modelDeathparticles_ = nullptr; 
-	//Goal
+	// デスパーティークル
+	KamataEngine::Model* modelDeathparticles_ = nullptr;
+	// Goal
 	KamataEngine::Model* modelGoal_ = nullptr;
-
-
 
 	// 自キャラ
 	Player* player_ = nullptr;
 
-	//弾
+	// 弾
 	Bullet* bullet_ = nullptr;
 
 	// キューブ
@@ -48,7 +44,7 @@ public:
 	// 敵
 	std::list<Enemy*> enemies_;
 
-	//全ての当たり判定を行う
+	// 全ての当たり判定を行う
 	void CheckAllCollisions();
 
 	// 表示ブロック
@@ -60,7 +56,6 @@ public:
 
 	DeathParticles* deathParticles_ = nullptr;
 
-
 	// 初期化
 	void Initialize();
 	// 更新
@@ -70,16 +65,12 @@ public:
 	// デストラクタ
 	~GameScene();
 
-	//デスフラグのgetter
+	// デスフラグのgetter
 	bool IsFinished() const { return finished_; }
-	
+
 	bool IsClear() const { return gameClear_; }
 
 private:
-	
-
-
-
 	KamataEngine::WorldTransform worldTransform_;
 
 	KamataEngine::Camera camera_;
@@ -92,19 +83,19 @@ private:
 
 	// ゲームのフェーズ（型）
 	enum class Phase {
-		kFadeIn,//フェードイン
-		kPlay,  // ゲームプレイ
-		kDeath, // デス演出
-		kFadeOut,//フェードアウト
+		kFadeIn,// フェードイン
+		kPlay,    // ゲームプレイ
+		kDeath,   // デス演出
+		kFadeOut, // フェードアウト
 	};
 
-	//ゲームの現在フェーズ（変数）
+	// ゲームの現在フェーズ（変数）
 	Phase phase_;
 
-	//フェーズの切り替え
+	// フェーズの切り替え
 	void ChangePhase();
 
-	//終了フラグ
+	// 終了フラグ
 	bool finished_ = false;
 
 	// フェード
@@ -118,5 +109,17 @@ private:
 	bool gameClear_ = false;
 
 	Model* modelPlayerAttack_ = nullptr;
+
+	// 音声ファイル
+	uint32_t soundTitleHandle_ = 0;
+	uint32_t soundGameHandle_ = 0;
+	uint32_t soundClearHandle_ = 0;
+	uint32_t soundOverHandle_ = 0;
+
+	// 音声再生ハンドル
+	int voiceTitleHandle_ = 0;
+	int voiceGameHandle_ = 0;
+	int voiceClearHandle_ = 0;
+	int voiceOverHandle_ = 0;
 
 };

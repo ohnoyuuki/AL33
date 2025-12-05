@@ -2,6 +2,7 @@
 #include "KamataEngine.h"
 #include"Fade.h"
 #include "MyMath.h"
+#include"GameScene.h"
 
 using namespace KamataEngine;
 class TitleScene {
@@ -47,6 +48,8 @@ private:
 	//フェード
 	Fade* fade_ = nullptr;
 
+	
+
 	//現在のフェーズ
 	Phase phase_ = Phase::kFadeIn;
 
@@ -55,4 +58,18 @@ private:
 
 	// スプライト
 	KamataEngine::Sprite* sprite_ = nullptr;
+
+	// 音声ファイル
+	uint32_t soundTitleHandle_ = 0;
+	uint32_t soundGameHandle_ = 0;
+	uint32_t soundClearHandle_ = 0;
+	uint32_t soundOverHandle_ = 0;
+
+	// 音声再生ハンドル
+	int voiceTitleHandle_ = 0;
+	int voiceGameHandle_ = 0;
+	int voiceClearHandle_ = 0;
+	int voiceOverHandle_ = 0;
+
+
 };
