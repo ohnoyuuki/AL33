@@ -103,20 +103,15 @@ void GameScene::Initialize() {
 	modelGoal_ = Model::Create();
 
 	// サウンドデータの読み込み
-	soundTitleHandle_ = Audio::GetInstance()->LoadWave("ALTitle.mp3");
+
 	soundGameHandle_ = Audio::GetInstance()->LoadWave("ALGame.mp3");
-	soundClearHandle_ = Audio::GetInstance()->LoadWave("ALClear.mp3");
-	soundOverHandle_ = Audio::GetInstance()->LoadWave("ALOver.mp3");
 
 	// --- 再生ハンドルは全部初期化しておく ---
-	voiceTitleHandle_ = -1;
-	voiceGameHandle_ = -1;
-	voiceClearHandle_ = -1;
-	voiceOverHandle_ = -1;
-	
-	// タイトルBGMをループで流す
-	voiceTitleHandle_ = Audio::GetInstance()->PlayWave(soundGameHandle_, true);
 
+	voiceGameHandle_ = -1;
+
+	// タイトルBGMをループで流す
+	voiceGameHandle_ = Audio::GetInstance()->PlayWave(soundGameHandle_, true);
 }
 
 // 更新//////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,7 +123,6 @@ void GameScene::Update() {
 
 	switch (phase_) {
 
-	
 	case Phase::kPlay:
 
 		// ゲームプレイフェーズの処理////////////////////////////////////
@@ -223,7 +217,6 @@ void GameScene::Update() {
 			bullet_->isActive_ = false;
 			// 音声停止
 			Audio::GetInstance()->StopWave(soundGameHandle_);
-			
 		}
 
 		// カメラの更新////////////////////
@@ -265,13 +258,10 @@ void GameScene::Update() {
 			}
 		}
 
-
-		
 		break;
 	case Phase::kFadeIn:
 		// ゲームプレイフェーズの処理////////////////////////////////////
-		
-		
+
 		// 天球の更新
 		skydome_->Update();
 		// 自キャラの更新
@@ -332,36 +322,13 @@ void GameScene::Update() {
 	worldTransformGoal_.matWorld_ = MakeAffineMatrix(worldTransformGoal_.scale_, worldTransformGoal_.rotation_, worldTransformGoal_.translation_);
 	worldTransformGoal_.TransferMatrix();
 
-	//ゲームクリア
+	// ゲームクリア
 	if (player_->GetWorldPosition().x >= 77) {
 		finished_ = true;
 		gameClear_ = true;
 		// 音声停止
 		Audio::GetInstance()->StopWave(soundGameHandle_);
-		// ゲームBGMをループ再生
-		voiceClearHandle_ = Audio::GetInstance()->PlayWave(soundClearHandle_, true);
 	}
-	// シーンが終了したら、音声を全て停止
-	if (finished_) {
-		// 再生ハンドルが有効な場合のみ停止
-		if (voiceGameHandle_ != -1) {
-			Audio::GetInstance()->StopWave(voiceGameHandle_);
-			voiceGameHandle_ = -1;
-		}
-		if (voiceClearHandle_ != -1) {
-			Audio::GetInstance()->StopWave(voiceClearHandle_);
-			voiceClearHandle_ = -1;
-		}
-		if (voiceOverHandle_ != -1) {
-			Audio::GetInstance()->StopWave(voiceOverHandle_);
-			voiceOverHandle_ = -1;
-		}
-		if (voiceTitleHandle_ != -1) {
-			Audio::GetInstance()->StopWave(voiceTitleHandle_);
-			voiceTitleHandle_ = -1;
-		}
-	}
-
 }
 
 // 描画/////////////////////////////////////////////////////////////////////////////////
@@ -445,9 +412,6 @@ GameScene::~GameScene() {
 	delete modelGoal_;
 
 	Audio::GetInstance()->StopWave(voiceGameHandle_);
-	Audio::GetInstance()->StopWave(voiceClearHandle_);
-	Audio::GetInstance()->StopWave(voiceOverHandle_);
-	Audio::GetInstance()->StopWave(voiceTitleHandle_);
 }
 
 void GameScene::ChangePhase() { ///////////////////////////////////////////////////////////
@@ -470,7 +434,7 @@ void GameScene::ChangePhase() { ////////////////////////////////////////////////
 	case Phase::kDeath:
 		// デス演出フェーズの処理
 		// 音声停止
-		Audio::GetInstance()->StopWave(soundOverHandle_);
+
 		break;
 
 	case Phase::kFadeIn:
@@ -483,11 +447,6 @@ void GameScene::ChangePhase() { ////////////////////////////////////////////////
 		// シーン終了
 		if (fade_->IsFinished()) {
 			finished_ = true;
-			// 音声停止
-			Audio::GetInstance()->StopWave(soundClearHandle_);
-			// 音声停止
-			Audio::GetInstance()->StopWave(soundOverHandle_);
-
 		}
 		break;
 	}

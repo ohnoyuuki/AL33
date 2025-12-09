@@ -52,6 +52,8 @@ void GameOverScene::Update() {
 		// --- メイン状態（キー待ち） ---
 		// スペースキー押したらフェードアウト開始
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			// 音声再生
+			Audio::GetInstance()->PlayWave(soundBotanHandle_);
 			// 音声停止
 			Audio::GetInstance()->StopWave(voiceOverHandle_);
 			phase_ = Phase::kFadeOut;

@@ -83,7 +83,7 @@ private:
 
 	// ゲームのフェーズ（型）
 	enum class Phase {
-		kFadeIn,// フェードイン
+		kFadeIn,  // フェードイン
 		kPlay,    // ゲームプレイ
 		kDeath,   // デス演出
 		kFadeOut, // フェードアウト
@@ -111,15 +111,10 @@ private:
 	Model* modelPlayerAttack_ = nullptr;
 
 	// 音声ファイル
-	uint32_t soundTitleHandle_ = 0;
+
 	uint32_t soundGameHandle_ = 0;
-	uint32_t soundClearHandle_ = 0;
-	uint32_t soundOverHandle_ = 0;
 
 	// 音声再生ハンドル
-	int voiceTitleHandle_ = 0;
-	int voiceGameHandle_ = 0;
-	int voiceClearHandle_ = 0;
-	int voiceOverHandle_ = 0;
 
+	int voiceGameHandle_ = 0;
 };

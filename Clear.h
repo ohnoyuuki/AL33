@@ -74,5 +74,8 @@ private:
 	// 音声再生ハンドル
 	
 	int voiceClearHandle_ = 0;
-	
+
+	// 効果音ハンドル
+	uint32_t soundBotanHandle_ = 0;
+
 };

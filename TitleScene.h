@@ -1,18 +1,17 @@
 #pragma once
+#include "Fade.h"
+#include "GameScene.h"
 #include "KamataEngine.h"
-#include"Fade.h"
 #include "MyMath.h"
-#include"GameScene.h"
 
 using namespace KamataEngine;
 class TitleScene {
 public:
-
-	//シーンのフェーズ
+	// シーンのフェーズ
 	enum class Phase {
-		kFadeIn,//フェードイン
-		kMain,//メイン部
-		kFadeOut,//フェードアウト
+		kFadeIn,  // フェードイン
+		kMain,    // メイン部
+		kFadeOut, // フェードアウト
 	};
 
 	// 初期化
@@ -24,12 +23,10 @@ public:
 	// デストラクタ
 	~TitleScene();
 
-
-	//デスフラグのgetter 
+	// デスフラグのgetter
 	bool IsFinished() const { return finished_; }
 
 private:
-
 	static inline const float kTimeTitleMove = 2.0f;
 
 	// ビュープロジェクション
@@ -42,15 +39,13 @@ private:
 
 	float counter_ = 0.0f;
 
-	//終了フラグ
+	// 終了フラグ
 	bool finished_ = false;
 
-	//フェード
+	// フェード
 	Fade* fade_ = nullptr;
 
-	
-
-	//現在のフェーズ
+	// 現在のフェーズ
 	Phase phase_ = Phase::kFadeIn;
 
 	// 画像読み込み
@@ -61,15 +56,10 @@ private:
 
 	// 音声ファイル
 	uint32_t soundTitleHandle_ = 0;
-	uint32_t soundGameHandle_ = 0;
-	uint32_t soundClearHandle_ = 0;
-	uint32_t soundOverHandle_ = 0;
 
 	// 音声再生ハンドル
 	int voiceTitleHandle_ = 0;
-	int voiceGameHandle_ = 0;
-	int voiceClearHandle_ = 0;
-	int voiceOverHandle_ = 0;
 
-
+	// 効果音ハンドル
+	uint32_t soundBotanHandle_ = 0;
 };
