@@ -31,6 +31,18 @@ void GameOverScene::Initialize() {
 
 	// --- スプライト生成 ---
 	sprite_ = Sprite::Create(textureHandle_, {0, 0}); // 画面左上に表示
+
+	// サウンドデータの読み込み
+	
+	soundOverHandle_ = Audio::GetInstance()->LoadWave("ALOver.mp3");
+
+	// --- 再生ハンドルは全部初期化しておく ---
+	
+	voiceOverHandle_ = -1;
+
+	// タイトルBGMをループで流す
+	voiceOverHandle_ = Audio::GetInstance()->PlayWave(soundOverHandle_, true);
+
 }
 
 void GameOverScene::Update() {
@@ -40,6 +52,8 @@ void GameOverScene::Update() {
 		// --- メイン状態（キー待ち） ---
 		// スペースキー押したらフェードアウト開始
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			// 音声停止
+			Audio::GetInstance()->StopWave(voiceOverHandle_);
 			phase_ = Phase::kFadeOut;
 			fade_->Start(Fade::Status::FadeOut, 1.0f); // 1秒フェードアウト
 		}

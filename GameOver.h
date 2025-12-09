@@ -59,5 +59,13 @@ public:
 	    // スプライト（2D画像表示用）
 	    KamataEngine::Sprite* sprite_ = nullptr;
 
+		// 音声ファイル
+	  
+	    uint32_t soundOverHandle_ = 0;
+
+	    // 音声再生ハンドル
+	   
+	    int voiceOverHandle_ = 0;
+
 
 };

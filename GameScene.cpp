@@ -223,8 +223,7 @@ void GameScene::Update() {
 			bullet_->isActive_ = false;
 			// 音声停止
 			Audio::GetInstance()->StopWave(soundGameHandle_);
-			// ゲームBGMをループ再生
-			voiceOverHandle_ = Audio::GetInstance()->PlayWave(soundOverHandle_, true);
+			
 		}
 
 		// カメラの更新////////////////////

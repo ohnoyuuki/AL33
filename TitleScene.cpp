@@ -34,15 +34,11 @@ void TitleScene::Initialize() {
 
 	// サウンドデータの読み込み
 	soundTitleHandle_ = Audio::GetInstance()->LoadWave("ALTitle.mp3");
-	soundGameHandle_ = Audio::GetInstance()->LoadWave("ALGame.mp3");
-	soundClearHandle_ = Audio::GetInstance()->LoadWave("ALClear.mp3");
-	soundOverHandle_ = Audio::GetInstance()->LoadWave("ALOver.mp3");
+	
 
 	// --- 再生ハンドルは全部初期化しておく ---
 	voiceTitleHandle_ = -1;
-	voiceGameHandle_ = -1;
-	voiceClearHandle_ = -1;
-	voiceOverHandle_ = -1;
+	
 
 	// タイトルBGMをループで流す
 	voiceTitleHandle_ = Audio::GetInstance()->PlayWave(soundTitleHandle_, true);
