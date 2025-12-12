@@ -9,7 +9,7 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 
 	// ブロック
-	modelBlock_ = Model::CreateFromOBJ("block");
+	modelBlock_ = Model::CreateFromOBJ("yuki");
 
 	// 天球（スカイドーム）
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
