@@ -106,6 +106,8 @@ void GameScene::Initialize() {
 
 	soundGameHandle_ = Audio::GetInstance()->LoadWave("ALGame.mp3");
 
+	//soundTamaHandle_ = Audio::GetInstance()->LoadWave("p_death.mp3");
+
 	// --- 再生ハンドルは全部初期化しておく ---
 
 	voiceGameHandle_ = -1;
@@ -209,12 +211,15 @@ void GameScene::Update() {
 
 		// デスパーティクルの更新
 		if (deathParticles_) {
+			
 			deathParticles_->Update();
 		}
 
 		// プレイヤーが死んだら弾消える
 		if (player_->IsDead()) {
+			
 			bullet_->isActive_ = false;
+			//Audio::GetInstance()->PlayWave(soundTamaHandle_);
 			// 音声停止
 			Audio::GetInstance()->StopWave(soundGameHandle_);
 		}
