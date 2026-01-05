@@ -71,7 +71,7 @@ class Player
 	// 重力加速度（下方向）
 	static inline const float kGravityAcceleration = 0.1f;
 	// 最大落下速度（下方向）
-	static inline const float kLimitFallSpeed = 0.5f;
+	static inline const float kLimitFallSpeed = 0.4f;
 	// ジャンプ初速（上方向
 	static inline const float kJumpAcceleration = 1.0f;
 
