@@ -21,7 +21,7 @@ void GameScene::Initialize() {
 	modelBullet_ = Model::CreateFromOBJ("tama");
 
 	// 敵
-	modelEnemy_ = Model::CreateFromOBJ("enemy");
+	modelEnemy_ = Model::CreateFromOBJ("boss");
 
 	// デスパーティクル
 	modelDeathparticles_ = Model::CreateFromOBJ("deathParticle");

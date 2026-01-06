@@ -38,6 +38,7 @@ public:
 	void OnCollision(const Player* player);
 	
 
+
 	private:
 	KamataEngine::WorldTransform worldTransform_;
 
