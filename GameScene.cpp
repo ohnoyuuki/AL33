@@ -480,7 +480,7 @@ void GameScene::CheckAllCollisions() {
 
 #pragma endregion
 
-	/*#pragma region 弾と敵の当たり判定
+	#pragma region 弾と敵の当たり判定
 	AABB bulletAABB = bullet_->GetAABB();
 
 	for (Enemy* enemy : enemies_) {
@@ -490,7 +490,7 @@ void GameScene::CheckAllCollisions() {
 	        bullet_->OnCollision(enemy);
 	        enemy->OnCollision(bullet_);
 	    }
-	}*/
+	}
 #pragma endregion
 }
 

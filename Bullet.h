@@ -33,6 +33,10 @@ public:
 		isActive_ = true;
 	}
 
+	//AABBを取得
+	AABB GetAABB();
+
+
 	//void OnCollision(Enemy* enemy) { isActive_ = false; }
 
 
@@ -43,4 +47,8 @@ private:
 	Model* model_ = nullptr;
 
 	Camera* camera_ = nullptr;
+
+	// キャラクターの当たり判定サイズ
+	static inline const float kWidth = 0.8f;
+	static inline const float kHeight = 0.8f;
 };

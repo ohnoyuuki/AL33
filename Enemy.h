@@ -37,7 +37,11 @@ public:
 	//衝突応答
 	void OnCollision(const Player* player);
 	
+	bool isAlive_ = true;
 
+	bool IsAlive() const { return isAlive_; }
+
+	void Kill() { isAlive_ = false; }
 
 	private:
 	KamataEngine::WorldTransform worldTransform_;
