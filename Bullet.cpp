@@ -69,3 +69,10 @@ void Bullet::Draw() {
 
 	 return aabb;
  }
+
+ void Bullet::OnCollision(const Enemy* enemy) {
+	 (void)enemy;
+	 // 当たったら消える　
+	 isActive_ = false; // 弾を消す
+
+ }

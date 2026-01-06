@@ -35,6 +35,9 @@ void Enemy::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera,
 // 更新
 void Enemy::Update() {
 
+	if (!isAlive_) {
+		return;
+	}
 	// 移動
 	worldTransform_.translation_.x += velocity_.x;
 
@@ -52,7 +55,9 @@ void Enemy::Draw() {
 
 	if (isAlive_) {
 		model_->Draw(worldTransform_, *camera_);
-	}
+		return;
+	};
+	
 }
 
 KamataEngine::Vector3 Enemy::GetWorldPosition() {
@@ -69,6 +74,10 @@ KamataEngine::Vector3 Enemy::GetWorldPosition() {
 
 AABB Enemy::GetAABB() {
 
+	if (!isAlive_) {
+		return {}; // 空のAABB（当たらない）
+	}
+
 	Vector3 worldPos = GetWorldPosition();
 
 	AABB aabb;
@@ -79,3 +88,8 @@ AABB Enemy::GetAABB() {
 }
 
 void Enemy::OnCollision(const Player* player) { (void)player; }
+
+void Enemy::OnCollision(const Bullet* bullet) {
+	(void)bullet;
+	isAlive_ = false;
+}

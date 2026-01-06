@@ -3,6 +3,8 @@
 #include "MyMath.h"
 
 class Player;
+class Bullet;
+
 class Enemy {
 public:
 	// 初期化
@@ -36,6 +38,8 @@ public:
 
 	//衝突応答
 	void OnCollision(const Player* player);
+	void OnCollision(const Bullet* bullet);
+
 	
 	bool isAlive_ = true;
 

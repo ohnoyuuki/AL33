@@ -481,15 +481,25 @@ void GameScene::CheckAllCollisions() {
 #pragma endregion
 
 	#pragma region 弾と敵の当たり判定
+	if (!bullet_->isActive_) {
+		return;
+	}
+
 	AABB bulletAABB = bullet_->GetAABB();
 
 	for (Enemy* enemy : enemies_) {
-	    AABB enemyAABB = enemy->GetAABB();
 
-	    if (IsCollision(bulletAABB, enemyAABB)) {
-	        bullet_->OnCollision(enemy);
-	        enemy->OnCollision(bullet_);
-	    }
+		if (!enemy->IsAlive()) {
+			continue; // ★ 死んでる敵は無視
+		}
+
+		AABB enemyAABB = enemy->GetAABB();
+
+		if (IsCollision(bulletAABB, enemyAABB)) {
+			bullet_->OnCollision(enemy);
+			enemy->OnCollision(bullet_);
+			break;
+		}
 	}
 #pragma endregion
 }

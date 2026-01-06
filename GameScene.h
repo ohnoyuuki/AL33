@@ -36,7 +36,7 @@ public:
 	Player* player_ = nullptr;
 
 	// 弾
-	Bullet* bullet_ = nullptr;
+	Bullet* bullet_;
 
 	// キューブ
 	Skydome* skydome_ = nullptr;

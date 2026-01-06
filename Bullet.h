@@ -9,6 +9,7 @@
 
 using namespace KamataEngine;
 
+class Enemy;
 class Bullet {
 
 public:
@@ -36,6 +37,8 @@ public:
 	//AABBを取得
 	AABB GetAABB();
 
+	//衝突応答
+	void OnCollision(const Enemy* enemy);
 
 	//void OnCollision(Enemy* enemy) { isActive_ = false; }
 
@@ -47,6 +50,9 @@ private:
 	Model* model_ = nullptr;
 
 	Camera* camera_ = nullptr;
+
+	// デスフラグ
+	bool isDead_ = false;
 
 	// キャラクターの当たり判定サイズ
 	static inline const float kWidth = 0.8f;
