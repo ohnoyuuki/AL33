@@ -40,9 +40,6 @@ public:
 	//衝突応答
 	void OnCollision(const Enemy* enemy);
 
-	//void OnCollision(Enemy* enemy) { isActive_ = false; }
-
-
 private:
 
 	WorldTransform worldTransform_;
