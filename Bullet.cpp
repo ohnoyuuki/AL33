@@ -28,7 +28,17 @@ void Bullet::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 void Bullet::Update() {
 
 	if (!isActive_) {
-		return; // 非表示なら処理なし
+		respawnTimer_ += 1.0f / 60.0f;
+
+		// ★ 3秒経ったら復活
+		if (respawnTimer_ >= kRespawnTime) {
+			isActive_ = true;
+			respawnTimer_ = 0.0f;
+
+			// 必要なら初期位置に戻す
+			worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
+		}
+		return;
 	}
 		
 	
@@ -37,7 +47,11 @@ void Bullet::Update() {
 	worldTransform_.translation_.y += velocity_.y;
 	worldTransform_.translation_.z += velocity_.z;
 
-
+	// ★ 画面外チェック
+	if (worldTransform_.translation_.x < -78.0f || worldTransform_.translation_.x > 78.0f) {
+		isActive_ = false; // 弾を消す
+		return;
+	}
 
 
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
@@ -74,5 +88,5 @@ void Bullet::Draw() {
 	 (void)enemy;
 	 // 当たったら消える　
 	 isActive_ = false; // 弾を消す
-
+	 respawnTimer_ = 0.0f;
  }

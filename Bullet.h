@@ -51,6 +51,12 @@ private:
 	// デスフラグ
 	bool isDead_ = false;
 
+	// 経過時間
+	float respawnTimer_ = 0.0f;
+
+	// 復活までの時間（秒）
+	static inline const float kRespawnTime = 3.0f;
+
 	// キャラクターの当たり判定サイズ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;

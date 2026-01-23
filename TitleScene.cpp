@@ -5,7 +5,7 @@
 void TitleScene::Initialize() {
 	// 3Dモデルの生成
 	modelTitle_ = Model::CreateFromOBJ("titleFont", true);
-	modelPlayer_ = Model::CreateFromOBJ("Enemy");
+	modelPlayer_ = Model::CreateFromOBJ("roboto");
 
 	// カメラの初期化
 	camera_.Initialize();
