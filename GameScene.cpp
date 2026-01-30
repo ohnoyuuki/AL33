@@ -76,13 +76,24 @@ void GameScene::Initialize() {
 	// 自キャラの生成と初期化（当たり判定用）
 	player_->SetMapChipField(mapChipField_);
 
-	// 敵生成（等間隔に5体）
-	for (int32_t i = 0; i < 5; i++) {
-		Enemy* newEnemy = new Enemy();
-		Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i * 17, 18);
-		newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
-		enemies_.push_back(newEnemy);
+	std::vector<Vector3> enemyPositions = {
+	    mapChipField_->GetMapChipPositionByIndex(20, 18), mapChipField_->GetMapChipPositionByIndex(30, 15), mapChipField_->GetMapChipPositionByIndex(45, 17),
+	    mapChipField_->GetMapChipPositionByIndex(60, 16), mapChipField_->GetMapChipPositionByIndex(75, 18),
+	};
+
+	for (Vector3& pos : enemyPositions) {
+		Enemy* enemy = new Enemy();
+		enemy->Initialize(modelEnemy_, &camera_, pos);
+		enemies_.push_back(enemy);
 	}
+
+	//// 敵生成（等間隔に5体）
+	//for (int32_t i = 0; i < 5; i++) {
+	//	Enemy* newEnemy = new Enemy();
+	//	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i * 17, 18);
+	//	newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
+	//	enemies_.push_back(newEnemy);
+	//}
 
 	// ゲームプレイフェーズから開始（フェードインから）
 	phase_ = Phase::kFadeIn;
