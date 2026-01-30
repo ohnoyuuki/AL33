@@ -106,7 +106,8 @@ class Player
 	void BehaviorRootInitialize();
 	//攻撃行動初期化
 	void BehaviorAttackInitialize();
-	
+	// 向きのgetter
+	LRDirection GetLRDirection() const { return lrDirection_; }
 
 private:
 	// ワールド変換データ

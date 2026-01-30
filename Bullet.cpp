@@ -28,16 +28,16 @@ void Bullet::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 void Bullet::Update() {
 
 	if (!isActive_) {
-		respawnTimer_ += 1.0f / 60.0f;
+		//respawnTimer_ += 1.0f / 60.0f;
 
-		// ★ 3秒経ったら復活
-		if (respawnTimer_ >= kRespawnTime) {
-			isActive_ = true;
-			respawnTimer_ = 0.0f;
+		//// ★ 3秒経ったら復活
+		//if (respawnTimer_ >= kRespawnTime) {
+		//	isActive_ = true;
+		//	respawnTimer_ = 0.0f;
 
-			// 必要なら初期位置に戻す
-			worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
-		}
+		//	// 必要なら初期位置に戻す
+		//	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
+		//}
 		return;
 	}
 		
@@ -89,4 +89,16 @@ void Bullet::Draw() {
 	 // 当たったら消える　
 	 isActive_ = false; // 弾を消す
 	 respawnTimer_ = 0.0f;
+ }
+
+ void Bullet::Fire(const Vector3& pos, bool isRight) {
+	 worldTransform_.translation_ = pos;
+	 isActive_ = true;
+
+	 // 向きで速度を変える
+	 if (isRight) {
+		 velocity_ = {-0.5f, 0.0f, 0.0f};
+	 } else {
+		 velocity_ = {0.5f, 0.0f, 0.0f};
+	 }
  }

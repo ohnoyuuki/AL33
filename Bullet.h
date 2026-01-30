@@ -39,6 +39,9 @@ public:
 
 	//衝突応答
 	void OnCollision(const Enemy* enemy);
+	
+	//発射方向を設定する関数
+	void Fire(const Vector3& pos, bool isRight);
 
 private:
 

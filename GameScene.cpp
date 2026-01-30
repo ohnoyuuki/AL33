@@ -141,7 +141,10 @@ void GameScene::Update() {
 		// if (!bullet_->isActive_) {
 		if (Input::GetInstance()->TriggerKey(DIK_J)) {
 			Vector3 pos = player_->GetWorldPosition();
-			bullet_->Reset(pos);
+
+			bool isRight = (player_->GetLRDirection() == Player::LRDirection::kRight);
+
+			bullet_->Fire(pos, isRight);
 		}
 		//}
 
