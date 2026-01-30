@@ -78,7 +78,8 @@ void GameScene::Initialize() {
 
 	std::vector<Vector3> enemyPositions = {
 	    mapChipField_->GetMapChipPositionByIndex(20, 18), mapChipField_->GetMapChipPositionByIndex(30, 15), mapChipField_->GetMapChipPositionByIndex(45, 17),
-	    mapChipField_->GetMapChipPositionByIndex(60, 16), mapChipField_->GetMapChipPositionByIndex(75, 18),
+	    mapChipField_->GetMapChipPositionByIndex(60, 16), mapChipField_->GetMapChipPositionByIndex(75, 18), mapChipField_->GetMapChipPositionByIndex(90, 17),
+	    mapChipField_->GetMapChipPositionByIndex(90, 18),
 	};
 
 	for (Vector3& pos : enemyPositions) {
