@@ -15,7 +15,7 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// プレイヤー
-	modelPlayer_ = Model::CreateFromOBJ("roboto");
+	modelPlayer_ = Model::CreateFromOBJ("P_robo");
 
 	// 弾
 	modelBullet_ = Model::CreateFromOBJ("tama");
