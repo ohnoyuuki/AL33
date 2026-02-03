@@ -168,6 +168,9 @@ void Player::OnCollision(const Enemy* enemy) {
 void Player::InputMove() {
 	if (onGround_) {
 
+		//ジャンプカウントを戻す
+		junmpCount_ = 0;
+
 		if (Input::GetInstance()->PushKey(DIK_D) || Input::GetInstance()->PushKey(DIK_A)) {
 
 			// 左右加速
@@ -217,9 +220,17 @@ void Player::InputMove() {
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 			// ジャンプ初速
 			velocity_ += Vector3(0, kJumpAcceleration, 0);
+			junmpCount_ += 1;
 		}
 		// 空中
 	} else {
+
+		//2段ジャンプ
+		if (junmpCount_ < maxJump_ && Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			velocity_ += Vector3(0, kJumpAcceleration/60.0f, 0);
+			junmpCount_ += 1;
+		}
+
 		// 落下速度
 		velocity_ += Vector3(0, -kGravityAcceleration, 0);
 		// 落下速度制限

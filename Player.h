@@ -198,6 +198,9 @@ private:
 	AttackPhase attackPhase_ = AttackPhase::kUnknown;
 	AttackPhase attackPhaseRequest_ = AttackPhase::kUnknown;
 
-
+	//ジャンプカウント
+	int junmpCount_ = 0;
+	//最大ジャンプ
+	int maxJump_ = 2;
 
 };
