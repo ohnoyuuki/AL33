@@ -197,4 +197,7 @@ private:
 	//攻撃フェーズ
 	AttackPhase attackPhase_ = AttackPhase::kUnknown;
 	AttackPhase attackPhaseRequest_ = AttackPhase::kUnknown;
+
+
+
 };
