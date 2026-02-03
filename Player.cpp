@@ -227,7 +227,7 @@ void Player::InputMove() {
 
 		//2段ジャンプ
 		if (junmpCount_ < maxJump_ && Input::GetInstance()->TriggerKey(DIK_SPACE)) {
-			velocity_ += Vector3(0, kJumpAcceleration/60.0f, 0);
+			velocity_ += Vector3(0.0f, kJumpAcceleration/60.0f+1.0f, 0.0f);
 			junmpCount_ += 1;
 		}
 
