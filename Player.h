@@ -203,4 +203,7 @@ private:
 	//最大ジャンプ
 	int maxJump_ = 2;
 
+	//効果音
+	uint32_t soundJumpHandle = 0;
+
 };

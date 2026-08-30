@@ -34,10 +34,10 @@ void ClearScene::Initialize() {
 	sprite_ = Sprite::Create(textureHandle_, {0, 0}); // 画面左上に表示
 
 	// 効果音データの読み込み
-	soundBotanHandle_ = Audio::GetInstance()->LoadWave("ALBotan.mp3");
+	soundBotanHandle_ = Audio::GetInstance()->LoadWave("sound/ALBotan.mp3");
 
 	// サウンドデータの読み込み
-	soundClearHandle_ = Audio::GetInstance()->LoadWave("ALClear.mp3");
+	soundClearHandle_ = Audio::GetInstance()->LoadWave("sound/ALClear.mp3");
 
 	// --- 再生ハンドルは全部初期化しておく ---
 

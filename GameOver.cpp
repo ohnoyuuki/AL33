@@ -33,8 +33,10 @@ void GameOverScene::Initialize() {
 	sprite_ = Sprite::Create(textureHandle_, {0, 0}); // 画面左上に表示
 
 	// サウンドデータの読み込み
-	
-	soundOverHandle_ = Audio::GetInstance()->LoadWave("ALOver.mp3");
+	soundOverHandle_ = Audio::GetInstance()->LoadWave("sound/ALOver.mp3");
+
+	// 効果音データの読み込み
+	soundBotanHandle_ = Audio::GetInstance()->LoadWave("sound/ALBotan.mp3");
 
 	// --- 再生ハンドルは全部初期化しておく ---
 	

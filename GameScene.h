@@ -111,9 +111,9 @@ private:
 	Model* modelPlayerAttack_ = nullptr;
 
 	// 音声ファイル
-
 	uint32_t soundGameHandle_ = 0;
-	//uint32_t soundTamaHandle_ = 0;
+	uint32_t soundTamaHandle_ = 0;
+	uint32_t soundJumpHandle = 0;
 
 
 	// 音声再生ハンドル

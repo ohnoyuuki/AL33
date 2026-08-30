@@ -24,6 +24,9 @@ void Player::Initialize(Model* model, Camera* camera, const Vector3& position) {
 
 	// 初期回転
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
+
+	//効果音
+	soundJumpHandle = Audio::GetInstance()->LoadWave("k_sound/jump.mp3");
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Player::Update() {
@@ -218,6 +221,8 @@ void Player::InputMove() {
 		}
 
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
+			// 音声再生
+			Audio::GetInstance()->PlayWave(soundJumpHandle);
 			// ジャンプ初速
 			velocity_ += Vector3(0, kJumpAcceleration, 0);
 			junmpCount_ += 1;
@@ -227,6 +232,8 @@ void Player::InputMove() {
 
 		//2段ジャンプ
 		if (junmpCount_ < maxJump_ && Input::GetInstance()->TriggerKey(DIK_SPACE)) {
+			// 音声再生
+			Audio::GetInstance()->PlayWave(soundJumpHandle);
 			velocity_ += Vector3(0.0f, kJumpAcceleration/60.0f+1.0f, 0.0f);
 			junmpCount_ += 1;
 		}

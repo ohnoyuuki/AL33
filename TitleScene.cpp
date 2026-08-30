@@ -32,10 +32,10 @@ void TitleScene::Initialize() {
 	sprite_ = Sprite::Create(textureHandle_, {0, 0});
 
 	// 効果音データの読み込み
-	soundBotanHandle_ = Audio::GetInstance()->LoadWave("ALBotan.mp3");
+	soundBotanHandle_ = Audio::GetInstance()->LoadWave("sound/ALBotan.mp3");
 
 	// サウンドデータの読み込み
-	soundTitleHandle_ = Audio::GetInstance()->LoadWave("ALTitle.mp3");
+	soundTitleHandle_ = Audio::GetInstance()->LoadWave("sound/ALTitle.mp3");
 
 	// --- 再生ハンドルは全部初期化しておく ---
 	voiceTitleHandle_ = -1;

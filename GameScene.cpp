@@ -89,12 +89,12 @@ void GameScene::Initialize() {
 	}
 
 	//// 敵生成（等間隔に5体）
-	//for (int32_t i = 0; i < 5; i++) {
+	// for (int32_t i = 0; i < 5; i++) {
 	//	Enemy* newEnemy = new Enemy();
 	//	Vector3 enemyPosition = mapChipField_->GetMapChipPositionByIndex(20 + i * 17, 18);
 	//	newEnemy->Initialize(modelEnemy_, &camera_, enemyPosition);
 	//	enemies_.push_back(newEnemy);
-	//}
+	// }
 
 	// ゲームプレイフェーズから開始（フェードインから）
 	phase_ = Phase::kFadeIn;
@@ -116,9 +116,11 @@ void GameScene::Initialize() {
 
 	// サウンドデータの読み込み
 
-	soundGameHandle_ = Audio::GetInstance()->LoadWave("ALGame.mp3");
+	soundGameHandle_ = Audio::GetInstance()->LoadWave("sound/ALGame.mp3");
 
-	//soundTamaHandle_ = Audio::GetInstance()->LoadWave("p_death.mp3");
+	soundTamaHandle_ = Audio::GetInstance()->LoadWave("k_sound/mizu.mp3");
+
+	soundJumpHandle = Audio::GetInstance()->LoadWave("k_sound/jump.mp3");
 
 	// --- 再生ハンドルは全部初期化しておく ---
 
@@ -152,6 +154,8 @@ void GameScene::Update() {
 		// スペースキーで弾を発射（位置をリセット）
 		// if (!bullet_->isActive_) {
 		if (Input::GetInstance()->TriggerKey(DIK_J)) {
+			// 音声再生
+			Audio::GetInstance()->PlayWave(soundTamaHandle_);
 			Vector3 pos = player_->GetWorldPosition();
 
 			bool isRight = (player_->GetLRDirection() == Player::LRDirection::kRight);
@@ -226,16 +230,16 @@ void GameScene::Update() {
 
 		// デスパーティクルの更新
 		if (deathParticles_) {
-			
+
 			deathParticles_->Update();
 		}
 
 		// プレイヤーが死んだら弾消える
 		if (player_->IsDead()) {
-			
+
 			bullet_->isActive_ = false;
-			//Audio::GetInstance()->PlayWave(soundTamaHandle_);
-			// 音声停止
+			// Audio::GetInstance()->PlayWave(soundTamaHandle_);
+			//  音声停止
 			Audio::GetInstance()->StopWave(soundGameHandle_);
 		}
 
@@ -495,7 +499,7 @@ void GameScene::CheckAllCollisions() {
 
 #pragma endregion
 
-	#pragma region 弾と敵の当たり判定
+#pragma region 弾と敵の当たり判定
 	if (!bullet_->isActive_) {
 		return;
 	}
