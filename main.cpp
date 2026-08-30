@@ -146,7 +146,7 @@ int WINAPI WinMain(_In_ HINSTANCE, _In_opt_ HINSTANCE, _In_ LPSTR, _In_ int) {
 	// ゲームシーンのインスタンス生成
 
 	// エンジンの初期化
-	KamataEngine::Initialize(L"LE3D_07_オオノ_ユウキ_WinterGame");
+	KamataEngine::Initialize(L"LE3D_07_オオノ_ユウキ_SummerGame");
 	// 最初のシーンの初期化
 	scene = Scene::kTitle;
 	titleScene = new TitleScene;
