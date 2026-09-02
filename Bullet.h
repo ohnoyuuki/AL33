@@ -42,6 +42,7 @@ public:
 	
 	//発射方向を設定する関数
 	void Fire(const Vector3& pos, bool isRight);
+	void FireHorizontal(const Vector3& pos, bool isRight);
 
 private:
 
@@ -63,4 +64,10 @@ private:
 	// キャラクターの当たり判定サイズ
 	static inline const float kWidth = 0.8f;
 	static inline const float kHeight = 0.8f;
+
+	// 弾が出現してからの時間
+	float lifeTimer_ = 0.0f;
+
+	// 弾の生存時間
+	static constexpr float kLifeTime = 1.0f;
 };

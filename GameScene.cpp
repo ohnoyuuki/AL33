@@ -9,7 +9,7 @@ void GameScene::Initialize() {
 	model_ = Model::Create();
 
 	// ブロック
-	modelBlock_ = Model::CreateFromOBJ("yuki");
+	modelBlock_ = Model::CreateFromOBJ("kusa");
 
 	// 天球（スカイドーム）
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
@@ -74,17 +74,83 @@ void GameScene::Initialize() {
 
 	// マップチップデータのセット
 	// 自キャラの生成と初期化（当たり判定用）
+	// マップチップデータのセット
 	player_->SetMapChipField(mapChipField_);
 
+	// 敵を20体生成
+	// マップチップデータのセット
+	player_->SetMapChipField(mapChipField_);
+
+	// 敵を20体生成
 	std::vector<Vector3> enemyPositions = {
-	    mapChipField_->GetMapChipPositionByIndex(20, 18), mapChipField_->GetMapChipPositionByIndex(30, 15), mapChipField_->GetMapChipPositionByIndex(45, 17),
-	    mapChipField_->GetMapChipPositionByIndex(60, 16), mapChipField_->GetMapChipPositionByIndex(75, 18), mapChipField_->GetMapChipPositionByIndex(90, 17),
+	    // 敵1
+	    mapChipField_->GetMapChipPositionByIndex(20, 18),
+
+	    // 敵2
+	    mapChipField_->GetMapChipPositionByIndex(30, 15),
+
+	    // 敵3
+	    mapChipField_->GetMapChipPositionByIndex(40, 18),
+
+	    // 敵4
+	    mapChipField_->GetMapChipPositionByIndex(50, 16),
+
+	    // 敵5
+	    mapChipField_->GetMapChipPositionByIndex(60, 18),
+
+	    // 敵6
+	    mapChipField_->GetMapChipPositionByIndex(70, 15),
+
+	    // 敵7
+	    mapChipField_->GetMapChipPositionByIndex(80, 18),
+
+	    // 敵8
+	    mapChipField_->GetMapChipPositionByIndex(90, 10),
+
+	    // 敵9
+	    mapChipField_->GetMapChipPositionByIndex(25, 12),
+
+	    // 敵10
+	    mapChipField_->GetMapChipPositionByIndex(35, 10),
+
+	    // 敵11
+	    mapChipField_->GetMapChipPositionByIndex(45, 12),
+
+	    // 敵12
+	    mapChipField_->GetMapChipPositionByIndex(55, 10),
+
+	    // 敵13
+	    mapChipField_->GetMapChipPositionByIndex(65, 12),
+
+	    // 敵14
+	    mapChipField_->GetMapChipPositionByIndex(75, 10),
+
+	    // 敵15
+	    mapChipField_->GetMapChipPositionByIndex(85, 12),
+
+	    // 敵16
+	    mapChipField_->GetMapChipPositionByIndex(95, 10),
+
+	    // 敵17
+	    mapChipField_->GetMapChipPositionByIndex(30, 18),
+
+	    // 敵18
+	    mapChipField_->GetMapChipPositionByIndex(50, 18),
+
+	    // 敵19
+	    mapChipField_->GetMapChipPositionByIndex(70, 18),
+
+	    // 敵20
 	    mapChipField_->GetMapChipPositionByIndex(90, 18),
 	};
 
+	// 敵を生成
 	for (Vector3& pos : enemyPositions) {
+
 		Enemy* enemy = new Enemy();
+
 		enemy->Initialize(modelEnemy_, &camera_, pos);
+
 		enemies_.push_back(enemy);
 	}
 
@@ -162,7 +228,16 @@ void GameScene::Update() {
 
 			bullet_->Fire(pos, isRight);
 		}
-		//}
+		
+		if (Input::GetInstance()->TriggerKey(DIK_K)) {
+			// 音声再生
+			Audio::GetInstance()->PlayWave(soundTamaHandle_);
+			Vector3 pos = player_->GetWorldPosition();
+
+			bool isRight = (player_->GetLRDirection() == Player::LRDirection::kRight);
+
+			bullet_->FireHorizontal(pos, isRight);
+		}
 
 		// 敵の更新
 		for (Enemy* enemy : enemies_) {

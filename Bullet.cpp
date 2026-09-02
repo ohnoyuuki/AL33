@@ -21,37 +21,39 @@ void Bullet::Initialize(KamataEngine::Model* model, KamataEngine::Camera* camera
 	worldTransform_.translation_ = position;
 
 	// 速度を設定する
-	velocity_ = {-0.5f, 0.0f, 0.0f};
+	velocity_ = {0.0f, 0.0f, 0.0f};
+
+	// タイマー初期化
+	lifeTimer_ = 0.0f;
 
 }
 
 void Bullet::Update() {
 
+// 弾が出ていないなら何もしない
 	if (!isActive_) {
-		//respawnTimer_ += 1.0f / 60.0f;
-
-		//// ★ 3秒経ったら復活
-		//if (respawnTimer_ >= kRespawnTime) {
-		//	isActive_ = true;
-		//	respawnTimer_ = 0.0f;
-
-		//	// 必要なら初期位置に戻す
-		//	worldTransform_.translation_ = {0.0f, 0.0f, 0.0f};
-		//}
 		return;
 	}
+
+	// 生存時間を加算
+	lifeTimer_ += 1.0f / 60.0f;
 		
+	// 1秒経ったら消す
+	if (lifeTimer_ >= kLifeTime) {
+		isActive_ = false;
+		return;
+	}
 	
-	//=== 移動 ===//
-	worldTransform_.translation_.x -= velocity_.x;
+	// 移動
+	worldTransform_.translation_.x += velocity_.x;
 	worldTransform_.translation_.y += velocity_.y;
 	worldTransform_.translation_.z += velocity_.z;
 
-	// ★ 画面外チェック
-	if (worldTransform_.translation_.x < -78.0f || worldTransform_.translation_.x > 78.0f) {
-		isActive_ = false; // 弾を消す
-		return;
-	}
+	//// ★ 画面外チェック
+	//if (worldTransform_.translation_.x < -78.0f || worldTransform_.translation_.x > 78.0f) {
+	//	isActive_ = false; // 弾を消す
+	//	return;
+	//}
 
 
 	worldTransform_.matWorld_ = MakeAffineMatrix(worldTransform_.scale_, worldTransform_.rotation_, worldTransform_.translation_);
@@ -95,10 +97,42 @@ void Bullet::Draw() {
 	 worldTransform_.translation_ = pos;
 	 isActive_ = true;
 
-	 // 向きで速度を変える
+	 // プレイヤーから少し前の位置に出す
 	 if (isRight) {
-		 velocity_ = {-0.5f, 0.0f, 0.0f};
+		 worldTransform_.translation_ = {pos.x + 2.0f, pos.y, pos.z};
 	 } else {
-		 velocity_ = {0.5f, 0.0f, 0.0f};
+		 worldTransform_.translation_ = {pos.x - 2.0f, pos.y, pos.z};
+	 }
+
+	 // 弾を有効にする
+	 isActive_ = true;
+
+	 // 生存時間をリセット
+	 lifeTimer_ = 0.0f;
+
+	 // 移動しない
+	 velocity_ = {0.0f, 0.2f, 0.0f};
+ }
+
+ void Bullet::FireHorizontal(const Vector3& pos, bool isRight) {
+
+	 // プレイヤーの少し前に出す
+	 if (isRight) {
+		 worldTransform_.translation_ = {pos.x + 2.0f, pos.y, pos.z};
+	 } else {
+		 worldTransform_.translation_ = {pos.x - 2.0f, pos.y, pos.z};
+	 }
+
+	 // 弾を有効にする
+	 isActive_ = true;
+
+	 // 生存時間をリセット
+	 lifeTimer_ = 0.0f;
+
+	 // X軸方向に移動
+	 if (isRight) {
+		 velocity_ = {0.3f, 0.0f, 0.0f};
+	 } else {
+		 velocity_ = {-0.3f, 0.0f, 0.0f};
 	 }
  }
