@@ -15,10 +15,10 @@ void GameScene::Initialize() {
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
 
 	// プレイヤー
-	modelPlayer_ = Model::CreateFromOBJ("roboto");
+	modelPlayer_ = Model::CreateFromOBJ("P_rinkerH");
 
 	// 弾
-	modelBullet_ = Model::CreateFromOBJ("tama");
+	modelBullet_ = Model::CreateFromOBJ("hammer");
 
 	// 敵
 	modelEnemy_ = Model::CreateFromOBJ("boss");
@@ -184,7 +184,7 @@ void GameScene::Initialize() {
 
 	soundGameHandle_ = Audio::GetInstance()->LoadWave("sound/ALGame.mp3");
 
-	soundTamaHandle_ = Audio::GetInstance()->LoadWave("k_sound/mizu.mp3");
+	soundTamaHandle_ = Audio::GetInstance()->LoadWave("k_sound/tataku.m4a");
 
 	soundJumpHandle = Audio::GetInstance()->LoadWave("k_sound/jump.mp3");
 
