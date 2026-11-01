@@ -8,6 +8,7 @@
 #include "MapChipField.h"
 #include "Player.h"
 #include "Skydome.h"
+#include"HpBar.h"
 #include <vector>
 
 using namespace KamataEngine;
@@ -103,12 +104,16 @@ private:
 
 	KamataEngine::WorldTransform worldTransformGoal_;
 
-	// 画像読み込み
-	uint32_t textureHandle_ = 0;
+	
+
 
 	bool gameClear_ = false;
 
 	Model* modelPlayerAttack_ = nullptr;
+
+	// 画像読み込み
+	uint32_t textureHandle_ = 0;
+	uint32_t textureHandleHP_ = 0;
 
 	// 音声ファイル
 	uint32_t soundGameHandle_ = 0;
@@ -117,6 +122,10 @@ private:
 
 
 	// 音声再生ハンドル
-
 	int voiceGameHandle_ = 0;
+
+	// グラフバー
+	HpBar* hpBar_ = nullptr;
+	int hp_ = 3;
+
 };

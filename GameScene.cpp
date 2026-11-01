@@ -5,32 +5,34 @@ using namespace KamataEngine;
 // 初期化/////////////////////////////////////////////////////////////
 void GameScene::Initialize() {
 
+
+	// スプライト読み込み
+	// HP
+	textureHandleHP_ = TextureManager::Load("white1x1.png");
+	hpBar_ = new HpBar();
+	hpBar_->Initialize(textureHandleHP_);
+
+
+
 	// モデル読み込み（汎用モデル）
 	model_ = Model::Create();
-
 	// ブロック
 	modelBlock_ = Model::CreateFromOBJ("kusa");
-
 	// 天球（スカイドーム）
 	modelSkydome_ = Model::CreateFromOBJ("skydome", true);
-
 	// プレイヤー
-	modelPlayer_ = Model::CreateFromOBJ("P_rinkerH");
-
+	modelPlayer_ = Model::CreateFromOBJ("roboto");
 	// 弾
-	modelBullet_ = Model::CreateFromOBJ("hammer");
-
+	modelBullet_ = Model::CreateFromOBJ("tama");
 	// 敵
 	modelEnemy_ = Model::CreateFromOBJ("boss");
-
 	// デスパーティクル
 	modelDeathparticles_ = Model::CreateFromOBJ("deathParticle");
 
-	worldTransform_.Initialize();
 
+	worldTransform_.Initialize();
 	// 自キャラの生成
 	player_ = new Player();
-
 	// 弾の生成
 	bullet_ = new Bullet();
 
@@ -80,6 +82,7 @@ void GameScene::Initialize() {
 	// 敵を20体生成
 	// マップチップデータのセット
 	player_->SetMapChipField(mapChipField_);
+
 
 	// 敵を20体生成
 	std::vector<Vector3> enemyPositions = {
@@ -143,6 +146,7 @@ void GameScene::Initialize() {
 	    // 敵20
 	    mapChipField_->GetMapChipPositionByIndex(90, 18),
 	};
+
 
 	// 敵を生成
 	for (Vector3& pos : enemyPositions) {
@@ -214,6 +218,9 @@ void GameScene::Update() {
 		// 自キャラの更新
 		player_->Update();
 
+		hpBar_->Update(hp_);
+
+
 		// 弾の更新
 		bullet_->Update();
 
@@ -228,7 +235,7 @@ void GameScene::Update() {
 
 			bullet_->Fire(pos, isRight);
 		}
-		
+
 		if (Input::GetInstance()->TriggerKey(DIK_K)) {
 			// 音声再生
 			Audio::GetInstance()->PlayWave(soundTamaHandle_);
@@ -433,6 +440,13 @@ void GameScene::Update() {
 // 描画/////////////////////////////////////////////////////////////////////////////////
 void GameScene::Draw() {
 	DirectXCommon* dxCommon = DirectXCommon::GetInstance();
+	//スプライト描画前処理
+	Sprite::PreDraw(dxCommon->GetCommandList());
+
+	hpBar_->Draw();
+
+	// スプライト描画後処理
+	Sprite::PostDraw();
 
 	Model::PreDraw(dxCommon->GetCommandList());
 
@@ -497,6 +511,8 @@ GameScene::~GameScene() {
 	delete mapChipField_;
 
 	delete cameraController_;
+
+	delete hpBar_;
 
 	// 解放
 	for (Enemy* enemy : enemies_) {

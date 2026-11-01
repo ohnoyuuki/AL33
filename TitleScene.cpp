@@ -27,9 +27,17 @@ void TitleScene::Initialize() {
 
 	// 画像読み込み
 	textureHandle_ = TextureManager::Load("Game.png");
+	textureHandleTitleBar_ = TextureManager::Load("GameTbar.png");
+	textureHandleStartBar_ = TextureManager::Load("GameSbar.png");
 
 	// スプライトインスタンスの生成
 	sprite_ = Sprite::Create(textureHandle_, {0, 0});
+	spriteTitleBar_ = Sprite::Create(textureHandleTitleBar_, {620, 300});
+	// 中心を基準にする
+	spriteTitleBar_->SetAnchorPoint({0.5f, 0.5f});
+	spriteTitleBar_->SetSize({600, 120});
+
+	spriteStartBar_ = Sprite::Create(textureHandleStartBar_, {500, 600});
 
 	// 効果音データの読み込み
 	soundBotanHandle_ = Audio::GetInstance()->LoadWave("sound/ALBotan.mp3");
@@ -45,10 +53,36 @@ void TitleScene::Initialize() {
 }
 
 void TitleScene::Update() {
+	// タイトルバーの拡大・縮小
+	titleBarTimer_ += 1.0f / 60.0f;
+
+	// 拡大率を計算
+	float t = (sinf(titleBarTimer_ * 2.0f) + 1.0f) / 2.0f;
+
+	titleBarScale_ = 0.9f + t * 0.2f;
+
+	// サイズ変更
+	spriteTitleBar_->SetSize({600.0f * titleBarScale_, 120.0f * titleBarScale_});
 
 	switch (phase_) {
 
 	case Phase::kMain:
+		//pushバー(点滅させる)
+		if (!pushFade_) {
+			pushAlpha_ -= 0.02f;
+			if (pushAlpha_ <= 0.2f) {
+				pushFade_ = true;
+			}
+		}
+		else {
+			pushAlpha_ += 0.02f;
+			if (pushAlpha_ >= 1.0f) {
+				pushFade_ = false;
+			}
+		}
+
+		spriteStartBar_->SetColor({1, 1, 1, pushAlpha_});
+
 		// タイトルシーンの終了条件
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
 			// 音声再生
@@ -93,6 +127,8 @@ void TitleScene::Draw() {
 	Sprite::PreDraw(dxCommon_->GetCommandList());
 
 	sprite_->Draw();
+	spriteTitleBar_->Draw();
+	spriteStartBar_->Draw();
 
 	Sprite::PostDraw();
 	// 深度バッファクリア
@@ -114,7 +150,10 @@ TitleScene::~TitleScene() {
 	delete modelTitle_;
 	delete modelPlayer_;
 
+	// スプライト
 	delete sprite_;
+	delete spriteTitleBar_;
+	delete spriteStartBar_;
 
 	// フェード
 	delete fade_;

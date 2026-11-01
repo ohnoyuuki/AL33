@@ -115,6 +115,7 @@
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="HpBar.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MapChipField.cpp" />
     <ClCompile Include="MyMath.cpp" />
@@ -206,6 +207,7 @@
     <ClInclude Include="Fade.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="GameScene.h" />
+    <ClInclude Include="HpBar.h" />
     <ClInclude Include="MapChipField.h" />
     <ClInclude Include="MyMath.h" />
     <ClInclude Include="Player.h" />

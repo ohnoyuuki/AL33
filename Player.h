@@ -109,6 +109,9 @@ class Player
 	// 向きのgetter
 	LRDirection GetLRDirection() const { return lrDirection_; }
 
+	// HPを取得
+	int GetHP() const { return hp_; }
+
 private:
 	// ワールド変換データ
 	KamataEngine::WorldTransform worldTransform_;
@@ -205,5 +208,15 @@ private:
 
 	//効果音
 	uint32_t soundJumpHandle = 0;
+
+	// プレイヤーのHP
+	int hp_ = 3;
+
+	// ダメージ後の無敵時間
+	int damageInvincibleTimer_ = 0;
+
+	// 無敵時間（60フレーム = 約1秒）
+	static inline const int kDamageInvincibleTime = 60;
+	
 
 };

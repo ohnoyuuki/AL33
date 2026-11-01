@@ -25,11 +25,26 @@ void Player::Initialize(Model* model, Camera* camera, const Vector3& position) {
 	// 初期回転
 	worldTransform_.rotation_.y = std::numbers::pi_v<float> / 2.0f;
 
+	// HPの初期化
+	hp_ = 3;
+
+	// 無敵時間の初期化
+	damageInvincibleTimer_ = 0;
+
+	// デスフラグの初期化
+	isDead_ = false;
+
 	//効果音
 	soundJumpHandle = Audio::GetInstance()->LoadWave("k_sound/jump.mp3");
 }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 void Player::Update() {
+
+	 // 無敵時間のカウント
+	if (damageInvincibleTimer_ > 0) {
+		damageInvincibleTimer_--;
+	}
+
 	// １移動入力//
 	InputMove();
 

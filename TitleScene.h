@@ -50,9 +50,14 @@ private:
 
 	// 画像読み込み
 	uint32_t textureHandle_ = 0;
+	uint32_t textureHandleTitleBar_ = 0;
+	uint32_t textureHandleStartBar_ = 0;
+
 
 	// スプライト
 	KamataEngine::Sprite* sprite_ = nullptr;
+	KamataEngine::Sprite* spriteTitleBar_ = nullptr;
+	KamataEngine::Sprite* spriteStartBar_ = nullptr;
 
 	// 音声ファイル
 	uint32_t soundTitleHandle_ = 0;
@@ -62,4 +67,12 @@ private:
 
 	// 効果音ハンドル
 	uint32_t soundBotanHandle_ = 0;
+
+	// タイトルバーの拡大・縮小
+	float titleBarScale_ = 1.0f;
+	float titleBarTimer_ = 0.0f;
+	// pushバー
+	float pushAlpha_ = 1.0f;
+	bool pushFade_ = false;
+	
 };
