@@ -178,8 +178,26 @@ AABB Player::GetAABB() {
 void Player::OnCollision(const Enemy* enemy) { 
 	(void)enemy;
 
-	//当たったら死ぬ　
-	isDead_ = true;
+	   // すでに死亡している場合は何もしない
+	if (isDead_) {
+		return;
+	}
+
+	// 無敵時間中ならダメージを受けない
+	if (damageInvincibleTimer_ > 0) {
+		return;
+	}
+
+	// HPを1減らす
+	hp_--;
+
+	// 無敵時間を設定
+	damageInvincibleTimer_ = kDamageInvincibleTime;
+
+	// HPが0になったら死亡
+	if (hp_ <= 0) {
+		isDead_ = true;
+	}
 
 }
 

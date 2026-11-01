@@ -218,7 +218,7 @@ void GameScene::Update() {
 		// 自キャラの更新
 		player_->Update();
 
-		hpBar_->Update(hp_);
+		
 
 
 		// 弾の更新
@@ -294,6 +294,9 @@ void GameScene::Update() {
 		}
 		// 全ての当たり判定
 		CheckAllCollisions();
+
+		// プレイヤーのHP
+		hpBar_->Update(player_->GetHP());
 
 		break;
 	case Phase::kDeath:

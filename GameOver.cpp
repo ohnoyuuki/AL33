@@ -28,9 +28,12 @@ void GameOverScene::Initialize() {
 
 	// --- 画像読み込み（2Dスプライト） ---
 	textureHandle_ = TextureManager::Load("Over.png");
+	textureHandleOverBar_ = TextureManager::Load("OverBar.png");
+
 
 	// --- スプライト生成 ---
-	sprite_ = Sprite::Create(textureHandle_, {0, 0}); // 画面左上に表示
+	sprite_ = Sprite::Create(textureHandle_, {0, 0}); 
+	spriteOverBar_ = Sprite::Create(textureHandleOverBar_, {400, 500}); 
 
 	// サウンドデータの読み込み
 	soundOverHandle_ = Audio::GetInstance()->LoadWave("sound/ALOver.mp3");
@@ -51,6 +54,21 @@ void GameOverScene::Update() {
 	switch (phase_) {
 
 	case Phase::kMain:
+		// pushバー(点滅させる)
+		if (!pushFade_) {
+			pushAlpha_ -= 0.02f;
+			if (pushAlpha_ <= 0.2f) {
+				pushFade_ = true;
+			}
+		} else {
+			pushAlpha_ += 0.02f;
+			if (pushAlpha_ >= 1.0f) {
+				pushFade_ = false;
+			}
+		}
+
+		spriteOverBar_->SetColor({1, 1, 1, pushAlpha_});
+
 		// --- メイン状態（キー待ち） ---
 		// スペースキー押したらフェードアウト開始
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
@@ -96,8 +114,10 @@ void GameOverScene::Draw() {
 	// --- スプライト描画開始 ---
 	Sprite::PreDraw(dxCommon_->GetCommandList());
 
-	// Clear.png を描画
+	
 	sprite_->Draw();
+
+	spriteOverBar_->Draw();
 
 	// スプライト描画終了
 	Sprite::PostDraw();

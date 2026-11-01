@@ -29,9 +29,12 @@ void ClearScene::Initialize() {
 
 	// --- 画像読み込み（2Dスプライト） ---
 	textureHandle_ = TextureManager::Load("Clear.png");
+	textureHandleClearBar_ = TextureManager::Load("ClearBar.png");
+
 
 	// --- スプライト生成 ---
 	sprite_ = Sprite::Create(textureHandle_, {0, 0}); // 画面左上に表示
+	spriteClearBar_ = Sprite::Create(textureHandleClearBar_, {400, 550}); // 画面中央に表示
 
 	// 効果音データの読み込み
 	soundBotanHandle_ = Audio::GetInstance()->LoadWave("sound/ALBotan.mp3");
@@ -52,6 +55,20 @@ void ClearScene::Update() {
 	switch (phase_) {
 
 	case Phase::kMain:
+		// pushバー(点滅させる)
+		if (!pushFade_) {
+			pushAlpha_ -= 0.02f;
+			if (pushAlpha_ <= 0.2f) {
+				pushFade_ = true;
+			}
+		} else {
+			pushAlpha_ += 0.02f;
+			if (pushAlpha_ >= 1.0f) {
+				pushFade_ = false;
+			}
+		}
+
+		spriteClearBar_->SetColor({1, 1, 1, pushAlpha_});
 		// --- メイン状態（キー待ち） ---
 		// スペースキー押したらフェードアウト開始
 		if (Input::GetInstance()->PushKey(DIK_SPACE)) {
@@ -100,6 +117,7 @@ void ClearScene::Draw() {
 
 	// Clear.png を描画
 	sprite_->Draw();
+	spriteClearBar_->Draw();
 
 	// スプライト描画終了
 	Sprite::PostDraw();
@@ -128,6 +146,7 @@ ClearScene::~ClearScene() {
 
 	// --- スプライト破棄 ---
 	delete sprite_;
+	delete spriteClearBar_;
 
 	// --- フェード破棄 ---
 	delete fade_;

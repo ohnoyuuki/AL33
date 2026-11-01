@@ -64,22 +64,23 @@ void TitleScene::Update() {
 	// サイズ変更
 	spriteTitleBar_->SetSize({600.0f * titleBarScale_, 120.0f * titleBarScale_});
 
+	// pushバー(点滅させる)
+	if (!pushFade_) {
+		pushAlpha_ -= 0.02f;
+		if (pushAlpha_ <= 0.2f) {
+			pushFade_ = true;
+		}
+	} else {
+		pushAlpha_ += 0.02f;
+		if (pushAlpha_ >= 1.0f) {
+			pushFade_ = false;
+		}
+	}
+
 	switch (phase_) {
 
 	case Phase::kMain:
-		//pushバー(点滅させる)
-		if (!pushFade_) {
-			pushAlpha_ -= 0.02f;
-			if (pushAlpha_ <= 0.2f) {
-				pushFade_ = true;
-			}
-		}
-		else {
-			pushAlpha_ += 0.02f;
-			if (pushAlpha_ >= 1.0f) {
-				pushFade_ = false;
-			}
-		}
+		
 
 		spriteStartBar_->SetColor({1, 1, 1, pushAlpha_});
 

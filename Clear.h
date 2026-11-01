@@ -63,19 +63,22 @@ private:
 
 	// 画像の読み込みハンドル（テクスチャID）
 	uint32_t textureHandle_ = 0;
+	uint32_t textureHandleClearBar_ = 0;
 
 	// スプライト（2D画像表示用）
 	KamataEngine::Sprite* sprite_ = nullptr;
+	KamataEngine::Sprite* spriteClearBar_ = nullptr;
 
 	// 音声ファイル
-	
 	uint32_t soundClearHandle_ = 0;
 	
 	// 音声再生ハンドル
-	
 	int voiceClearHandle_ = 0;
 
 	// 効果音ハンドル
 	uint32_t soundBotanHandle_ = 0;
 
+	// pushバー
+	float pushAlpha_ = 1.0f;
+	bool pushFade_ = false;
 };
