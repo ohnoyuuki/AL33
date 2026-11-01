@@ -142,6 +142,7 @@ GameOverScene::~GameOverScene() {
 
 	// --- スプライト破棄 ---
 	delete sprite_;
+	delete spriteOverBar_;
 
 	// --- フェード破棄 ---
 	delete fade_;
