@@ -7,13 +7,14 @@
 
 using namespace KamataEngine;
 
-// 各シーンのインスタンス（ポインタ）
+// 各シーンのインスタンスを管理するポインタ
+// nullptrは、まだインスタンスが作られていない状態を表す
 GameScene* gameScene = nullptr;
 TitleScene* titleScene = nullptr;
 ClearScene* clearScene = nullptr;
 GameOverScene* overScene = nullptr;
 
-// シーンの種類
+// シーンの種類を管理する列挙型
 enum class Scene {
 	kUnknown = 0,
 	kTitle,// タイトル
@@ -22,11 +23,13 @@ enum class Scene {
 	kOver,// ゲームオーバー
 };
 
-// 現在のシーンを示す変数
+// 現在どのシーンを表示しているかを管理する変数
 Scene scene = Scene::kUnknown;
 
 // シーン切り替え処理
+// 現在のシーンが終了したかを確認し、次のシーンへ切り替える
 void ChangeScene() {
+
 	switch (scene) {
 		//タイトルシーン
 	case Scene::kTitle:
@@ -35,12 +38,14 @@ void ChangeScene() {
 			// ゲームシーンへ切り替え
 			scene = Scene::kGame;
 
-			// 古いシーン削除
+			// 使用しなくなったタイトルシーンを削除する
 			delete titleScene;
 			titleScene = nullptr;
 
-			// 新しいゲームシーン作成＆初期化
+			// 新しいゲームシーンのインスタンスを生成する
 			gameScene = new GameScene;
+
+			// ゲームシーンの初期化を行う
 			gameScene->Initialize();
 		}
 		break;
@@ -48,64 +53,83 @@ void ChangeScene() {
 		//ゲームシーン
 	case Scene::kGame:
 
-		// ゲームシーンが終了したか
+		
+		// ゲームシーンが終了したか確認する
 		if (gameScene->IsFinished()) {
 			// シーン変更
 
-			 // クリアしたか？
+			 // ゲームをクリアしたか確認する
 			if (gameScene->IsClear()) {
 
-				// クリアシーンへ
+				// クリアシーンに切り替える
 				scene = Scene::kClear;
+
+				// クリアシーンのインスタンスを生成する
 				clearScene = new ClearScene;
+
+				// クリアシーンの初期化を行う
 				clearScene->Initialize();
 
 			} else {
-				// 失敗 → オーバーシーンへ
+				// クリアできなかった場合はゲームオーバーシーンに切り替える
 				scene = Scene::kOver;
+
+				// ゲームオーバーシーンのインスタンスを生成する
 				overScene = new GameOverScene;
+
+				// ゲームオーバーシーンの初期化を行う
 				overScene->Initialize();
 			}
 		
 
-			 // 古いゲームシーン削除
+			// 使用しなくなったゲームシーンを削除する
 			delete gameScene;
 			gameScene = nullptr;
 		}
 		break;
 		//クリアシーン
 	case Scene::kClear:
+
+		// クリアシーンが終了したか確認する
 		if (clearScene->IsFinished()) {
 
-			// タイトルへ戻る
+			// タイトルシーンに戻る
 			scene = Scene::kTitle;
-			// 古いクリアシーン削除
+
+			// 使用しなくなったクリアシーンを削除する
 			delete clearScene;
 			clearScene = nullptr;
 
-			// 新しいタイトルシーン作成
+			// 新しいタイトルシーンのインスタンスを生成する
 			titleScene = new TitleScene;
+
+			// タイトルシーンの初期化を行う
 			titleScene->Initialize();
 		}
 		break;
 		//オーバーシーン
 	case Scene::kOver:
+
+		// ゲームオーバーシーンが終了したか確認する
 		if (overScene->IsFinished()) {
 			
-			// タイトルへ戻る
+			// タイトルシーンに戻る
 			scene = Scene::kTitle;
-			// 古いオーバシーン削除
+			// 使用しなくなったゲームオーバーシーンを削除する
 			delete overScene;
 			overScene = nullptr;
 
-			// 新しいタイトルシーン作成
+			// 新しいタイトルシーンのインスタンスを生成する
 			titleScene = new TitleScene;
+
+			// タイトルシーンの初期化を行う
 			titleScene->Initialize();
 		}
 	}
 }
 
 // シーンの更新処理
+// 現在表示しているシーンのUpdate()だけを呼び出す
 void UpdateScene() {
 
 	switch (scene) {
@@ -124,6 +148,7 @@ void UpdateScene() {
 	}
 }
 // シーンの描画処理
+// 現在のシーンに対応したDraw()だけを呼び出す
 void DrawScene() {
 	switch (scene) {
 	case Scene::kTitle:
