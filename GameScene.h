@@ -4,59 +4,17 @@
 #include "DeathParticles.h"
 #include "Enemy.h"
 #include "Fade.h"
+#include "HpBar.h"
 #include "KamataEngine.h"
 #include "MapChipField.h"
 #include "Player.h"
 #include "Skydome.h"
-#include"HpBar.h"
 #include <vector>
 
 using namespace KamataEngine;
 
 class GameScene {
 public:
-	Model* model_ = nullptr;
-
-	Model* modelBlock_ = nullptr;
-	// 3Dモデル
-	Model* modelSkydome_ = nullptr;
-	// モデルプレイヤー
-	Model* modelPlayer_ = nullptr;
-
-	// 弾
-	Model* modelBullet_ = nullptr;
-
-	// モデル敵
-	KamataEngine::Model* modelEnemy_ = nullptr;
-	// デスパーティークル
-	KamataEngine::Model* modelDeathparticles_ = nullptr;
-	// Goal
-	KamataEngine::Model* modelGoal_ = nullptr;
-
-	// 自キャラ
-	Player* player_ = nullptr;
-
-	// 弾
-	Bullet* bullet_;
-
-	// キューブ
-	Skydome* skydome_ = nullptr;
-
-	// 敵
-	std::list<Enemy*> enemies_;
-
-	// 全ての当たり判定を行う
-	void CheckAllCollisions();
-
-	// 表示ブロック
-	void GenerateBlocks();
-
-	MapChipField* mapChipField_;
-
-	CameraController* cameraController_;
-
-	DeathParticles* deathParticles_ = nullptr;
-
 	// 初期化
 	void Initialize();
 	// 更新
@@ -72,6 +30,37 @@ public:
 	bool IsClear() const { return gameClear_; }
 
 private:
+	// 自キャラ
+	Player* player_ = nullptr;
+
+	// 弾
+	Bullet* bullet_ = nullptr;
+
+	// キューブ
+	Skydome* skydome_ = nullptr;
+
+	// 敵
+	std::list<Enemy*> enemies_;
+
+	//モデル
+	KamataEngine::Model* model_ = nullptr;
+
+	KamataEngine::Model* modelBlock_ = nullptr;
+	// 3Dモデル
+	KamataEngine::Model* modelSkydome_ = nullptr;
+	// モデルプレイヤー
+	KamataEngine::Model* modelPlayer_ = nullptr;
+	// 弾
+	KamataEngine::Model* modelBullet_ = nullptr;
+	// モデル敵
+	KamataEngine::Model* modelEnemy_ = nullptr;
+	// デスパーティークル
+	KamataEngine::Model* modelDeathparticles_ = nullptr;
+	// Goal
+	KamataEngine::Model* modelGoal_ = nullptr;
+
+
+
 	KamataEngine::WorldTransform worldTransform_;
 
 	KamataEngine::Camera camera_;
@@ -80,7 +69,19 @@ private:
 
 	std::vector<std::vector<KamataEngine::WorldTransform*>> worldTransformBlocks_;
 
+	MapChipField* mapChipField_;
+
+	CameraController* cameraController_;
+
+	DeathParticles* deathParticles_ = nullptr;
+
 	bool isDebugCameraActive_ = false;
+
+	// 全ての当たり判定を行う
+	void CheckAllCollisions();
+
+	// 表示ブロック
+	void GenerateBlocks();
 
 	// ゲームのフェーズ（型）
 	enum class Phase {
@@ -104,9 +105,6 @@ private:
 
 	KamataEngine::WorldTransform worldTransformGoal_;
 
-	
-
-
 	bool gameClear_ = false;
 
 	Model* modelPlayerAttack_ = nullptr;
@@ -120,12 +118,10 @@ private:
 	uint32_t soundTamaHandle_ = 0;
 	uint32_t soundJumpHandle = 0;
 
-
 	// 音声再生ハンドル
 	int voiceGameHandle_ = 0;
 
 	// グラフバー
 	HpBar* hpBar_ = nullptr;
 	int hp_ = 3;
-
 };
