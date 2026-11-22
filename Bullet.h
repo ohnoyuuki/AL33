@@ -20,13 +20,10 @@ public:
 	void Update();
 	void Draw();
 
-	// ワールド座標を取得
-	Vector3 GetWorldPosition();
+	
 
-	// 速度
-	Vector3 velocity_ = {};
-
-	bool isActive_ = false;
+	
+	
 
 	//リセット
 	void Reset(const Vector3& pos) {
@@ -45,6 +42,14 @@ public:
 	void FireHorizontal(const Vector3& pos, bool isRight);
 
 private:
+
+	// 速度
+	Vector3 velocity_ = {};
+
+	// ワールド座標を取得
+	Vector3 GetWorldPosition();
+
+	bool isActive_ = false;
 
 	WorldTransform worldTransform_;
 
