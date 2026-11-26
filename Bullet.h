@@ -40,6 +40,7 @@ public:
 	//発射方向を設定する関数
 	void Fire(const Vector3& pos, bool isRight);
 	void FireHorizontal(const Vector3& pos, bool isRight);
+	bool isActive_ = false;
 
 private:
 
@@ -49,7 +50,7 @@ private:
 	// ワールド座標を取得
 	Vector3 GetWorldPosition();
 
-	bool isActive_ = false;
+
 
 	WorldTransform worldTransform_;
 
